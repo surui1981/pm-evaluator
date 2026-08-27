@@ -1,0 +1,12 @@
+{
+  "name": "pm-evaluator-server",
+  "version": "0.1.0",
+  "description": "PM-Evaluator 独立后端 API：数据读写 + 每日定时任务",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

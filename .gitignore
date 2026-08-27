@@ -1,0 +1,25 @@
+# ---- Node ----
+node_modules/
+*.log
+
+# ---- SQLite 数据库（本地数据，不入库）----
+*.db
+*.db-shm
+*.db-wal
+
+# ---- Python ----
+__pycache__/
+*.pyc
+
+# ---- WorkBuddy 内部 ----
+.workbuddy/
+
+# ---- 临时/产物 ----
+.check/
+*.zip
+.DS_Store
+Thumbs.db
+
+# ---- 密钥警示占位（防止误放密钥）----
+fred_key.txt
+data/fred_key.txt

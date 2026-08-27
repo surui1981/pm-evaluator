@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>贵金属投资窗口预期 · 交互评估器 v0.2</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#0e141b; --panel:#161f2b; --panel2:#1b2634; --line:#2a3848;
+    --txt:#e6edf3; --muted:#93a1b0; --gold:#e0b13e; --gold2:#d4a017;
+    --bull:#e0533a; --bear:#3fae7a; --accent:#5aa9ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.6;font-size:14px}
+  .wrap{max-width:1240px;margin:0 auto;padding:26px 20px 60px}
+  header{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
+  h1{font-size:22px;margin:0 0 6px;font-weight:700}
+  .sub{color:var(--muted);font-size:13px}
+  .tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);
+    color:var(--gold);font-size:12px;padding:2px 9px;border-radius:11px;margin-right:6px}
+  h2{font-size:16px;margin:22px 0 10px;padding-left:10px;border-left:3px solid var(--gold)}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+  @media(max-width:900px){.g2{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .card h3{margin:0 0 12px;font-size:14px;color:var(--gold)}
+  .field{margin-bottom:15px}
+  .field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+  .field label{font-size:13px;color:var(--txt)}
+  .field .wtag{font-size:10.5px;color:var(--muted);margin-left:6px}
+  .field .hint{font-size:11px;color:var(--muted)}
+  .field .val{font-size:15px;font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--gold);height:4px;cursor:pointer}
+  .signal{text-align:center;border-radius:14px;padding:18px;margin-bottom:14px;
+    border:1px solid var(--line);background:var(--panel2)}
+  .signal .big{font-size:30px;font-weight:800;letter-spacing:1px}
+  .signal .desc{font-size:13px;color:var(--muted);margin-top:4px}
+  .gauge{width:100%;height:220px}
+  .bars{width:100%;height:210px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left}
+  th{background:var(--panel2);color:var(--gold);font-weight:600}
+  tr:nth-child(even){background:#13202c}
+  .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;font-weight:600}
+  .p-bull{background:rgba(224,83,58,.18);color:#f08a72;border:1px solid rgba(224,83,58,.4)}
+  .p-bear{background:rgba(63,174,122,.16);color:#79d3a6;border:1px solid rgba(63,174,122,.4)}
+  .p-mid{background:rgba(147,161,176,.16);color:#c4d0db;border:1px solid rgba(147,161,176,.4)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin:4px 0 8px}
+  .legend b{font-weight:700}
+  .param-time{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 10px;padding:8px 12px;
+    background:rgba(90,169,255,.08);border:1px solid rgba(90,169,255,.32);border-radius:8px;font-size:12.5px;color:var(--muted)}
+  .param-time .pt-label{color:var(--accent);font-weight:700}
+  .param-time .pt-val{color:var(--txt);font-weight:700;font-variant-numeric:tabular-nums}
+  .param-time .pt-src{color:var(--muted)}
+  .param-time.manual{background:rgba(224,177,62,.08);border-color:rgba(224,177,62,.32)}
+  .param-time.manual .pt-label{color:var(--gold)}
+  .param-time.stale{background:rgba(224,83,58,.1);border-color:rgba(224,83,58,.55)}
+  .param-time.stale .pt-label{color:var(--bull)}
+  .src-panel{margin:8px 0 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:2px 10px}
+  .src-panel summary{cursor:pointer;font-weight:600;color:var(--gold);font-size:12.5px;padding:7px 0}
+  .src-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:7px;padding:6px 0 10px}
+  .src-cell{border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:var(--panel);font-size:11.5px}
+  .src-cell .sc-name{font-weight:700;color:var(--txt);margin-bottom:3px}
+  .src-cell .sc-src{color:var(--accent)}
+  .src-cell .sc-meta{color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+  .src-cell .sc-freq{display:inline-block;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;margin-top:3px}
+  .sc-freq.daily{background:rgba(95,191,148,.16);color:#5fbf94}
+  .sc-freq.weekly{background:rgba(224,177,62,.16);color:var(--gold)}
+  .sc-freq.quarter{background:rgba(90,169,255,.16);color:var(--accent)}
+  .sc-freq.manual{background:rgba(224,83,58,.16);color:var(--bull)}
+  .threshold-table{width:100%;border-collapse:collapse;margin:6px 0;font-size:12px}
+  .threshold-table th,.threshold-table td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .threshold-table th{background:var(--panel2);color:var(--gold);font-weight:600}
+  .threshold-table tr.active{background:rgba(224,177,62,.16);box-shadow:inset 3px 0 0 var(--gold)}
+  .threshold-table tr.active td{font-weight:600;border-color:var(--gold)}
+  .threshold-table .rng{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+  .b-quality{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .band-action{margin-top:10px;padding:10px 13px;border-radius:8px;background:var(--panel2);
+    border:1px solid var(--line);font-size:12.5px;line-height:1.6}
+  .band-action b{color:var(--gold)}
+  .sizing{color:var(--gold);font-weight:700}
+  .lc-bull{color:var(--bull)} .lc-bear{color:var(--bear)} .lc-mid{color:var(--muted)}
+  .note{background:rgba(224,177,62,.08);border:1px solid rgba(224,177,62,.3);
+    border-radius:8px;padding:10px 13px;margin:10px 0;font-size:12.5px;line-height:1.55}
+  .foot{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12px}
+  .notice{margin:0 0 18px;padding:14px 18px;border-radius:12px;position:relative;overflow:hidden;
+    background:linear-gradient(180deg,rgba(224,177,62,.14),rgba(224,177,62,.05));
+    border:1px solid rgba(224,177,62,.5)}
+  .notice::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+  .notice h4{margin:0 0 10px;font-size:14px;color:var(--gold);display:flex;align-items:center;gap:8px;font-weight:700}
+  .notice h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 9px var(--gold)}
+  .notice ol{margin:0;padding-left:22px}
+  .notice li{margin:5px 0;font-size:13px;line-height:1.55;color:var(--txt)}
+  .notice li b{color:var(--gold)}
+  .notice .em{color:var(--bull);font-weight:700}
+  details.collapse-card{margin-top:0}
+  details.collapse-card>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;
+    align-items:center;padding:0}
+  details.collapse-card>summary::-webkit-details-marker{display:none}
+  details.collapse-card>summary .ch-title{font-size:14px;color:var(--gold);font-weight:700}
+  details.collapse-card>summary .chev{color:var(--gold);font-size:13px;transition:transform .2s;display:inline-block}
+  details.collapse-card[open]>summary .chev{transform:rotate(90deg)}
+  .set-remind{background:rgba(90,169,255,.1);border:1px solid rgba(90,169,255,.42);border-radius:8px;
+    padding:9px 13px;margin-bottom:12px;font-size:12.5px;line-height:1.55;color:var(--txt)}
+  .set-remind b{color:var(--accent)}
+  .btn{background:var(--gold);color:#1a1206;border:none;border-radius:8px;padding:8px 16px;
+    font-size:13px;font-weight:700;cursor:pointer;margin-top:6px}
+  .btn:hover{background:#f0c45a}
+  .statusbar{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:10px;
+    padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+    font-size:12.5px;color:var(--muted)}
+  .statusbar b{color:var(--txt)}
+  .statusbar .btn{margin:0;padding:4px 12px;font-size:12px}
+  .statusbar label{cursor:pointer;display:flex;align-items:center;gap:5px}
+  details.pillar{border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin-bottom:12px;background:var(--panel2)}
+  details.pillar>summary{cursor:pointer;color:var(--gold);font-size:13.5px;font-weight:600;padding:6px 0}
+  details.pillar .prow{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+  .vrow{display:flex;gap:18px;flex-wrap:wrap}
+  .vbox{flex:1;min-width:150px}
+  /* ---------- 窗口日历追踪 ---------- */
+  .cal-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+  .cal-head h3{margin:0;color:var(--gold)}
+  .cal-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .cal-month{font-weight:700;font-size:15px;min-width:88px;text-align:center;color:var(--txt)}
+  .cal-rec{background:var(--bull);color:#fff}
+  .cal-rec:hover{background:#f0715a}
+  .cal-note{background:rgba(90,169,255,.08);border:1px solid rgba(90,169,255,.32);border-radius:8px;
+    padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--txt);line-height:1.5}
+  .cal-flash{height:16px;font-size:12px;color:var(--gold);opacity:0;transition:opacity .3s;margin:2px 0 8px}
+  .cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+  .cal-week span{text-align:center;font-size:12px;color:var(--muted)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-cell{position:relative;min-height:88px;border:1px solid var(--line);border-radius:8px;
+    background:var(--panel2);padding:6px 8px;font-size:12px}
+  .cal-cell.empty{background:transparent;border-color:transparent}
+  .cal-cell.has{cursor:pointer;transition:filter .15s}
+  .cal-cell.has:hover{filter:brightness(1.18)}
+  .cal-cell .dnum{font-weight:700;color:var(--txt)}
+  .cal-cell .dscore{font-size:13px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .cal-cell .dband{font-size:10.5px;margin-top:1px}
+  .cal-cell .dact{font-size:10px;font-weight:600;margin-top:2px;opacity:.92}
+  .cal-cell .dgold{font-size:10px;margin-top:3px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;opacity:.95}
+  .cal-cell .dtoday{position:absolute;top:5px;right:7px;font-size:9px;color:var(--gold);font-weight:700}
+  .cal-cell .darc{position:absolute;top:4px;left:6px;font-size:10px;opacity:.85;line-height:1}
+  .gold-chart-card{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px 12px}
+  .gold-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12.5px;color:var(--txt)}
+  .gold-chart-head .gold-sub{color:var(--muted);font-size:11px;font-weight:400}
+  .gold-chart-note{font-size:11.5px;font-variant-numeric:tabular-nums}
+  .cal-trend{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px 12px}
+  .cal-trend-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12.5px;color:var(--txt)}
+  .cal-trend-note{font-size:11px;color:var(--muted)}
+  .cal-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11.5px;color:var(--txt)}
+  .cal-chip{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
+  .chip-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .cal-detail{margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);font-size:12.5px}
+  .cal-detail h4{margin:0 0 8px;color:var(--gold);font-size:13px}
+  .cal-detail .cal-close{float:right;cursor:pointer;color:var(--muted);font-size:12px}
+  .cal-detail .cal-close:hover{color:var(--bull)}
+  @media(max-width:560px){.cal-cell{min-height:64px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="notice">
+  <h4><span class="dot"></span>投资纪律铁律 · 入市前必读（四条）</h4>
+  <ol>
+    <li><b>综合素质要求极高</b>：贵金属 / 衍生品投资对认知、信息与心态的综合要求属于超高难度，绝非轻松获利之地，须以敬畏之心对待。</li>
+    <li><b>信息即判断基石</b>：正确筛选关注信息、锁定<b>市场核心要素</b>，是获得正确判断的前提——方向错了，再多努力都是徒劳。</li>
+    <li><b>认识自己，认识市场</b>：理性评价与判断，是在这个残酷市场中生存的法则；既不神话自己，也不低估市场。</li>
+    <li><b>坚守纪律，对自己负责</b>：不随情绪波动而偏离，不把责任外推，<span class="em">严守投资纪律，对自己的资金与决策负责</span>。</li>
+  </ol>
+</div>
+
+<header>
+  <div style="margin-bottom:8px">
+    <span class="tag">金融服务 · 贵金属衍生品</span>
+    <span class="tag">投资窗口预期评估器</span>
+    <span class="tag">v0.4</span>
+  </div>
+  <h1>贵金属投资窗口预期 · 交互评估器（全面参数版）</h1>
+  <div class="sub">覆盖美元指数 / 美元利率 / 美债各期限收益率 / 央行购金 / GLD ETF 资金流 / 地缘与避险等 13 项黄金定价因子，按典型经验赋权，字体颜色区分利多（红）/ 利空（绿）/ 中性（灰）。</div>
+  <div class="statusbar">
+    <span>当前时间：<b id="clock">--:--:--</b></span>
+    <span>数据来源：<b id="dataSrc">手动/默认</b></span>
+    <span>参数日期：<b id="paramDate">—</b></span>
+    <span>最后评估：<b id="lastEval">—</b></span>
+    <label><input type="checkbox" id="autoRefresh" /> 自动刷新（30s 心跳）</label>
+    <button class="btn" id="refresh">手动刷新</button>
+  </div>
+</header>
+
+<div class="card" style="margin-bottom:20px">
+  <div class="cal-head">
+    <h3>① 窗口日历追踪 · 每日窗口参数记录</h3>
+    <div class="cal-tools">
+      <button class="btn" id="calPrev">‹ 上月</button>
+      <span class="cal-month" id="calMonth">—</span>
+      <button class="btn" id="calNext">下月 ›</button>
+      <button class="btn cal-rec" id="calRecord">📌 记录今日窗口</button>
+    </div>
+  </div>
+  <div class="cal-note">按「窗口阈值与操作参考」为每日着色：日期框颜色 = 当日综合分对应档位（<b style="color:#e0533a">红=强多</b> / <b style="color:#e8896f">橙=偏多</b> / <b style="color:#5aa9ff">蓝=中性</b> / <b style="color:#5fbf94">绿=偏空</b> / <b style="color:#3fae7a">深绿=强空</b>），日期框内数值为 <b>0~100 分制窗口分</b>（50=中性），并标注操作参考，逐日追踪判断轨迹；<b>点击任意有记录日期</b>，会立即把该日独立存储的参数代入上方评估器重新计算，并在详情面板复盘当日完整参数与金价。数据仅存于本机浏览器（localStorage），不上传、不共享。</div>
+  <div class="cal-flash" id="calFlash"></div>
+  <div class="cal-week">
+    <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-legend" id="calLegend"></div>
+  <div class="gold-chart-card">
+    <div class="gold-chart-head">
+      <span>📊 纽约 COMEX 黄金价格变动曲线 <span class="gold-sub">（日线 · 前复权）</span></span>
+      <span class="gold-chart-note" id="goldNote">加载中…</span>
+    </div>
+    <div id="goldChart" style="height:230px"></div>
+  </div>
+  <div class="cal-trend">
+    <div class="cal-trend-head"><span>📈 近期综合分趋势（数值追踪）</span><span class="cal-trend-note" id="trendNote">加载中…</span></div>
+    <div id="trendChart" style="height:170px"></div>
+  </div>
+  <div class="cal-detail" id="calDetail" style="display:none"></div>
+</div>
+
+<div class="grid g2">
+  <!-- ============ 结果面板（全宽优先查看） ============ -->
+  <div class="card" style="grid-column:1 / -1; grid-row:1">
+    <div class="set-remind" id="setRemind">📌 <b>关键变量设置已折叠</b>：如需调整 DXY / 美元利率 / 美债收益率 / 央行购金 / GLD ETF 流量等 13 项黄金定价因子，请展开下方「⑦ 关键变量设置」选项卡进行配置；当前展示为市场快照默认值（<span id="snapDateHint">—</span>）。</div>
+    <h3>② 窗口信号与评估</h3>
+    <div class="signal" id="signal">
+      <div class="big" id="sigText">—</div>
+      <div class="desc" id="sigDesc"></div>
+    </div>
+    <div id="gauge" class="gauge"></div>
+    <div id="bars" class="bars"></div>
+
+    <h3 style="margin-top:8px">③ 参数明细 · 决策数据（面向客户）</h3>
+    <div class="param-time" id="paramUpdateTime">
+      <span class="pt-label">参数值获取时间</span>
+      <span class="pt-val" id="ptVal">加载中…</span>
+      <span class="pt-src" id="ptSrc"></span>
+    </div>
+    <div class="legend">
+      <span><b class="lc-bull">红字</b> = 利多金价（推动上涨）</span>
+      <span><b class="lc-bear">绿字</b> = 利空金价（推动下跌）</span>
+      <span><b class="lc-mid">灰字</b> = 中性</span>
+    </div>
+    <table id="paramTable">
+      <tr><th>参数</th><th>当前值</th><th>映射得分（0-100）</th><th>经验权重</th><th>对金价</th></tr>
+    </table>
+
+    <details class="src-panel" id="srcPanel" open>
+      <summary>📡 数据来源与更新频率（每项参数「获得时间 / 来源 / 频率」）</summary>
+      <div class="src-grid" id="srcGrid"></div>
+    </details>
+
+    <h3 style="margin-top:14px">④ 共振验证（金银比 · 参考，不计入主分）</h3>
+    <div class="vrow">
+      <div class="vbox field" style="margin:0">
+        <div class="row"><label>金银比（Gold/Silver）</label><span class="val" id="v_gsr">67</span></div>
+        <input type="range" id="gsr" min="50" max="100" step="1" value="67" />
+        <div class="hint">偏高 → 白银后续弹性更强（相对价值信号）</div>
+      </div>
+    </div>
+    <div class="note" id="validNote"></div>
+
+    <h3 style="margin-top:14px">⑤ 入场时机提示（框架输出，非投资建议）</h3>
+    <div class="note" id="entryHint"></div>
+
+    <h3 style="margin-top:14px">⑥ 窗口阈值与操作参考（有指向）</h3>
+    <div id="bandRef"></div>
+    <div class="band-action" id="bandAction"></div>
+
+    <button class="btn" id="reset">重置为市场快照</button>
+  </div>
+
+  <!-- ============ 关键变量设置（默认折叠 / 隐藏） ============ -->
+  <details class="card collapse-card" id="inputPanel" style="grid-column:1 / -1; grid-row:2">
+    <summary>
+      <span class="ch-title">⑦ 关键变量设置（点击展开 / 折叠）</span>
+      <span class="chev">▸</span>
+    </summary>
+    <div id="pillars"></div>
+  </details>
+</div>
+
+<div class="note" style="margin-top:16px">
+  <b>经验权重说明（典型经验，须历史回测校准）：</b>实际利率（尤其 10Y TIPS）是黄金最稳健的负相关变量，赋权最高；美元指数其次；央行购金为近年结构性多头支柱；地缘与避险为事件驱动。三支柱初始权重 38% / 27% / 35%，各子参数权重已归一化到总权重。本权重为研究示意值，落地纪律前须用历史数据回测。
+</div>
+
+
+<div class="foot">
+  <p><b>免责声明</b>：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</p>
+</div>
+</div>
+
+<script>
+// ---------- 评分映射（内部 -1~+1：+1=强利多金价，-1=强利空；对外展示统一为 0~100 分制，50=中性）----------
+
+function mapTIPS(v){ if(v>=2.5)return -1; if(v>=2.0)return -0.8; if(v>=1.0)return -0.4; if(v>=0)return 0.1; if(v>=-0.5)return 0.6; return 1; }
+function mapUst10(v){ if(v>=5.0)return -1; if(v>=4.5)return -0.7; if(v>=4.0)return -0.3; if(v>=3.0)return 0.1; if(v>=2.0)return 0.5; return 1; }
+function mapUst2(v){ if(v>=5.5)return -1; if(v>=5.0)return -0.6; if(v>=4.5)return -0.2; if(v>=3.5)return 0.3; if(v>=2.5)return 0.7; return 1; }
+function mapFFR(v){ if(v>=5.5)return -1; if(v>=5.0)return -0.6; if(v>=4.5)return -0.2; if(v>=3.5)return 0.3; if(v>=2.5)return 0.7; return 1; }
+function mapCurve(s){ if(s<=-0.8)return 1; if(s<=-0.2)return 0.6; if(s<=0.2)return 0.1; if(s<=1.0)return -0.4; return -1; }
+function mapDXY(v){ if(v>=105)return -1; if(v>=103)return -0.7; if(v>=101)return -0.3; if(v>=99)return 0.1; if(v>=97)return 0.5; return 0.9; }
+function mapTWI(v){ if(v>=130)return -1; if(v>=125)return -0.6; if(v>=120)return -0.1; if(v>=115)return 0.4; return 0.8; }
+function mapRateDiff(d){ if(d>=3.0)return -1; if(d>=2.0)return -0.5; if(d>=1.0)return 0.0; if(d>=0)return 0.4; return 1; }
+function mapCB(t){ if(t>=300)return 0.9; if(t>=200)return 0.6; if(t>=100)return 0.3; if(t>=0)return -0.1; return -0.8; }
+function mapGPR(g){ if(g>=70)return 0.9; if(g>=50)return 0.5; if(g>=30)return 0.1; return -0.3; }
+function mapFiscal(r){ if(r>=70)return 0.9; if(r>=50)return 0.5; if(r>=30)return 0.1; return -0.2; }
+function mapVIX(v){ if(v>=30)return 0.9; if(v>=22)return 0.5; if(v>=15)return 0.1; return -0.2; }
+function mapGSR(v){ if(v>=85)return 0.8; if(v>=75)return 0.4; if(v>=65)return 0.0; if(v>=55)return -0.3; return -0.7; }
+function mapETF(v){ if(v>=8)return 0.8; if(v>=3)return 0.4; if(v>=0)return 0.1; if(v>=-5)return -0.3; return -0.8; }
+
+// ---------- 参数定义（经验权重已归一化，总计=1）----------
+const PILLARS = [
+  {key:'bond', name:'支柱一 · 实际利率与美债收益率', w:0.38},
+  {key:'usd',  name:'支柱二 · 美元指数与政策分化',   w:0.27},
+  {key:'sov',  name:'支柱三 · 主权央行与避险需求',   w:0.35}
+];
+const PARAMS = [
+  {id:'tips',   pillar:'bond', name:'10Y TIPS 实际利率', unit:'%',  min:-1, max:3,   step:0.05, def:1.80, w:0.17, fn:mapTIPS,   hint:'黄金最干净解释变量：实际利率↑→金价↓'},
+  {id:'ust10y', pillar:'bond', name:'10Y 名义国债收益率', unit:'%',  min:1,  max:6,   step:0.05, def:4.65, w:0.08, fn:mapUst10,  hint:'机会成本：收益率↑→金价↓'},
+  {id:'ust2y',  pillar:'bond', name:'2Y 国债收益率',     unit:'%',  min:1,  max:6,   step:0.05, def:4.00, w:0.05, fn:mapUst2,   hint:'政策预期定价'},
+  {id:'ffr',    pillar:'bond', name:'联邦基金利率(美元政策利率)', unit:'%', min:1, max:6, step:0.05, def:4.50, w:0.06, fn:mapFFR, hint:'美元利率中枢：高→金价承压'},
+  {id:'curve',  pillar:'bond', name:'收益率曲线斜率 2s10s', unit:'%', min:-1.5, max:2, step:0.05, def:0.50, w:0.02, fn:mapCurve, hint:'倒挂(负)→衰退避险→利多'},
+  {id:'dxy',    pillar:'usd',  name:'美元指数 DXY',      unit:'',   min:90, max:108, step:0.1, def:98.8, w:0.15, fn:mapDXY,    hint:'美元越强→金价越弱'},
+  {id:'twi',    pillar:'usd',  name:'美元贸易加权指数',   unit:'',   min:105,max:135, step:0.5, def:118,  w:0.07, fn:mapTWI,    hint:'广义美元强弱'},
+  {id:'ratediff',pillar:'usd', name:'美欧政策利率分化',   unit:'%',  min:-1, max:4,   step:0.1, def:2.0,  w:0.05, fn:mapRateDiff,hint:'美溢价越宽→美元强→利空'},
+  {id:'cb',     pillar:'sov',  name:'全球央行季净购金',   unit:'t',  min:-50,max:400, step:5,  def:289,  w:0.09, fn:mapCB,     hint:'结构性需求底：>300t 强多'},
+  {id:'gpr',    pillar:'sov',  name:'地缘风险指数 GPR',   unit:'',   min:0,  max:100, step:1,  def:55,   w:0.07, fn:mapGPR,    hint:'避险与信用对冲需求'},
+  {id:'fiscal', pillar:'sov',  name:'美元信用风险指数',   unit:'',   min:0,  max:100, step:1,  def:60,   w:0.06, fn:mapFiscal, hint:'财政/赤字风险越高→利多'},
+  {id:'vix',    pillar:'sov',  name:'避险情绪 VIX',      unit:'',   min:10, max:45,  step:1,  def:16,   w:0.05, fn:mapVIX,    hint:'恐慌升温→避险利多'},
+  {id:'etf',    pillar:'sov',  name:'GLD ETF 月度流量（$B）', unit:'', min:-15,max:15, step:1, def:3,   w:0.08, fn:mapETF,    hint:'纽约交易所大行财报披露的黄金 ETF 资金流：净流入→机构支撑利多'}
+];
+
+const THRESH = 0.33;
+const VALID = ['gsr'];
+
+// ---------- 5 档窗口阈值与有指向的操作参考 ----------
+// 内部综合分以 -1(强空) ~ +1(强多) 计算；对外展示统一为 0~100 分制（50=中性，c100 转换）
+// 档位从高到低排列，bandOf 取首个满足 min 的档；range 为 100 分制区间
+const BANDS = [
+  {key:'strongBull', min:0.66, range:'83.0 ~ 100.0', name:'强多窗口', short:'积极建仓', color:'#e0533a', impact:'极强利多',
+   action:'积极建仓 / 分批加仓，可侧重白银弹性表达', sizing:'建议仓位 70–90%',
+   risk:'以「10Y TIPS 实际利率上破 + DXY 重回 101」作为减仓 / 止盈信号'},
+  {key:'bull', min:0.33, range:'66.5 ~ 83.0', name:'偏多窗口', short:'分批建仓', color:'#e8896f', impact:'利多',
+   action:'分批建仓，逢回调吸纳；优先黄金底仓 + 白银弹性', sizing:'建议仓位 40–60%',
+   risk:'以「实际利率拐点向上 + DXY 重上 99」作为窗口失效信号'},
+  {key:'neutral', min:-0.33, range:'33.5 ~ 66.5', name:'中性窗口', short:'观望', color:'#5aa9ff', impact:'均衡',
+   action:'观望或小仓试错，等待任一支柱明确突破', sizing:'建议仓位 0–20%',
+   risk:'严格单笔止损（如 -3%~-5%），信号清晰前不加仓'},
+  {key:'bear', min:-0.66, range:'17.0 ~ 33.5', name:'偏空窗口', short:'减仓避险', color:'#5fbf94', impact:'利空',
+   action:'降低敞口 / 避险为主，可关注空头或对冲', sizing:'建议仓位 0–20%（或对冲）',
+   risk:'以「综合分回升至中性区上方」作为重新评估信号'},
+  {key:'strongBear', min:-1.01, range:'0.0 ~ 17.0', name:'强空窗口', short:'清仓避险', color:'#3fae7a', impact:'极强利空',
+   action:'清仓 / 严格避险，等待利率与美元拐点', sizing:'建议仓位 0%',
+   risk:'避免抄底，等待 DXY 走弱 + 实际利率回落共振'}
+];
+function bandOf(c){ for(const b of BANDS){ if(c>=b.min) return b; } return BANDS[BANDS.length-1]; }
+
+// ---------- 动态生成输入面板 ----------
+const pillarsEl = document.getElementById('pillars');
+PILLARS.forEach(pil=>{
+  const ps = PARAMS.filter(p=>p.pillar===pil.key);
+  let fields = '';
+  ps.forEach(p=>{
+    fields += '<div class="field">'
+      + '<div class="row"><label>'+p.name+'<span class="wtag">权重 '+(p.w*100).toFixed(1)+'%</span></label>'
+      + '<span class="val" id="v_'+p.id+'">'+fmtDef(p)+'</span></div>'
+      + '<input type="range" id="'+p.id+'" min="'+p.min+'" max="'+p.max+'" step="'+p.step+'" value="'+p.def+'" />'
+      + '<div class="hint">'+p.hint+'</div></div>';
+  });
+  const det = document.createElement('details');
+  det.className = 'pillar';
+  det.open = (pil.key==='bond');
+  det.innerHTML = '<summary>'+pil.name+'</summary>'
+    + '<div class="prow"><span>支柱经验权重 '+(pil.w*100).toFixed(0)+'%</span><span>子参数权重已归一化</span></div>'
+    + fields;
+  pillarsEl.appendChild(det);
+});
+
+// 动态生成参数明细表（含表头外的行）
+const tableEl = document.getElementById('paramTable');
+PARAMS.forEach(p=>{
+  const tr = document.createElement('tr');
+  tr.id = 'row_'+p.id;
+  tr.innerHTML = '<td>'+p.name+'</td>'
+    + '<td class="c-val" id="tv_'+p.id+'">'+fmtDef(p)+'</td>'
+    + '<td class="c-score" id="ts_'+p.id+'">—</td>'
+    + '<td>'+(p.w*100).toFixed(1)+'%</td>'
+    + '<td class="c-impact" id="ti_'+p.id+'">—</td>';
+  tableEl.appendChild(tr);
+});
+
+// ---------- 窗口阈值对照表（动态生成，单一数据源）----------
+const bandRefEl = document.getElementById('bandRef');
+function buildBandRef(){
+  let html = '<table class="threshold-table"><tr><th>综合分区间（100 分制）</th><th>窗口评级</th><th>对金价</th><th>操作参考</th><th>仓位参考</th></tr>';
+  BANDS.slice().reverse().forEach(b=>{
+    html += '<tr id="band_'+b.key+'">'
+      + '<td class="rng">'+b.range+'</td>'
+      + '<td><span class="b-quality" style="background:'+b.color+'"></span><b style="color:'+b.color+'">'+b.name+'</b></td>'
+      + '<td>'+b.impact+'</td>'
+      + '<td>'+b.action+'</td>'
+      + '<td class="sizing">'+b.sizing+'</td>'
+      + '</tr>';
+  });
+  html += '</table>';
+  bandRefEl.innerHTML = html;
+}
+function highlightBand(comp){
+  const cur = bandOf(comp);
+  BANDS.forEach(b=>{
+    const tr = document.getElementById('band_'+b.key);
+    if(tr) tr.classList.toggle('active', b.key===cur.key);
+  });
+}
+
+// ---------- 工具函数 ----------
+function fmtDef(p){ return p.def + (p.unit==='%'?'%':(p.unit==='t'?'t':'')); }
+function nowStr(){
+  const d=new Date(), p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());
+}
+function fmtVal(p,v){ return (p.unit==='%'? v.toFixed(2)+'%' : (p.unit==='t'? v.toFixed(0)+'t' : v.toFixed(p.step<1?1:0))); }
+// 100 分制：内部评分 -1~+1 → 0~100（50=中性，+1→100 强多，-1→0 强空）
+function c100(v){ return Math.min(100, Math.max(0, (v+1)*50)); }
+// 对外显示统一 100 分制（保留 1 位小数）
+function fmt(v){ return c100(v).toFixed(1); }
+function toneColor(v){ if(v>=0.33) return 'var(--bull)'; if(v<=-0.33) return 'var(--bear)'; return 'var(--muted)'; }
+function pill(v){
+  if(v>=0.33) return '<span class="pill p-bull">利多</span>';
+  if(v<=-0.33) return '<span class="pill p-bear">利空</span>';
+  return '<span class="pill p-mid">中性</span>';
+}
+
+const gauge = echarts.init(document.getElementById('gauge'));
+const bars  = echarts.init(document.getElementById('bars'));
+
+// ---------- 参数来源显示 ----------
+function setParamDate(src, label){
+  CURRENT_PARAM_SOURCE = src || null;
+  const el = document.getElementById('paramDate');
+  if(!el) return;
+  el.textContent = label || (src || '实时/默认');
+  el.style.color = src ? 'var(--gold)' : 'var(--txt)';
+}
+
+// ---------- 主计算 ----------
+function compute(){
+  PARAMS.forEach(p=>{ p.val = parseFloat(document.getElementById(p.id).value); });
+  VALID.forEach(id=>{ window['_'+id] = parseFloat(document.getElementById(id).value); });
+
+  // 同步显示 + 颜色
+  PARAMS.forEach(p=>{
+    const vt = document.getElementById('v_'+p.id);
+    vt.textContent = fmtVal(p, p.val);
+    const tv = document.getElementById('tv_'+p.id);
+    tv.textContent = fmtVal(p, p.val);
+    tv.style.color = 'var(--txt)';
+  });
+  document.getElementById('v_gsr').textContent = window._gsr.toFixed(0);
+
+  // 得分
+  PARAMS.forEach(p=>{ p.score = p.fn(p.val); });
+
+  // 支柱得分
+  PILLARS.forEach(pil=>{
+    const ps = PARAMS.filter(p=>p.pillar===pil.key);
+    let n=0,d=0; ps.forEach(p=>{ n+=p.score*p.w; d+=p.w; });
+    pil.score = d? n/d : 0;
+  });
+
+  // 综合分（按经验总权重）
+  let n=0,d=0; PARAMS.forEach(p=>{ n+=p.score*p.w; d+=p.w; });
+  const comp = d? n/d : 0;
+  document.getElementById('lastEval').textContent = nowStr();
+
+  // 信号（5 档评级 + 有指向参考）
+  const band = bandOf(comp);
+  const sig = document.getElementById('signal');
+  sig.style.borderColor = band.color;
+  document.getElementById('sigText').textContent = band.name + '  (' + fmt(comp) + ' 分)';
+  document.getElementById('sigText').style.color = band.color;
+  document.getElementById('sigDesc').textContent = band.action + ' ｜ ' + band.sizing;
+  highlightBand(comp);
+
+  // 有指向操作参考卡
+  const bp = PILLARS.reduce((a,b)=>a.score>b.score?a:b);
+  const wp = PILLARS.reduce((a,b)=>a.score<b.score?a:b);
+  document.getElementById('bandAction').innerHTML =
+    '当前落在 <b style="color:'+band.color+'">'+band.name+'</b>（综合分 '+fmt(comp)+' 分）→ '+band.action
+    + '。最强支柱：<b style="color:var(--bull)">'+bp.name.replace('支柱','')+'</b>，最弱：'+wp.name.replace('支柱','')+'。'
+    + ' <b>仓位参考：</b><span class="sizing">'+band.sizing+'</span>。 <b>失效 / 风控信号：</b>'+band.risk;
+
+  // 明细表：字体颜色体现利多/利空
+  PARAMS.forEach(p=>{
+    const sc = document.getElementById('ts_'+p.id);
+    sc.textContent = fmt(p.score); sc.style.color = toneColor(p.score);
+    const tv = document.getElementById('tv_'+p.id);
+    tv.style.color = toneColor(p.score);
+    document.getElementById('ti_'+p.id).innerHTML = pill(p.score);
+  });
+
+  // 共振验证（金银比）
+  const gsrS = mapGSR(window._gsr);
+  document.getElementById('validNote').innerHTML =
+    '金银比 '+window._gsr.toFixed(0)+'（'+(gsrS>=0.33?'<b style="color:var(--bull)">偏高·白银弹性强</b>':gsrS<=-0.33?'<b style="color:var(--bear)">偏低·白银偏弱</b>':'中性')+'）。'
+    + ' GLD ETF 月度流量（纽约交易所大行财报披露）已计入主分（支柱三），不再重复验证。'
+    + ' 验证层与主分同向时信号更可信。';
+
+  // 入场提示（指向性）
+  const bullP = PILLARS.reduce((a,b)=>a.score>b.score?a:b);
+  const bearP = PILLARS.reduce((a,b)=>a.score<b.score?a:b);
+  let hint = '综合分 '+fmt(comp)+' 分 → <b style="color:'+band.color+'">'+band.name+'</b>。'
+    + '主导多头力量：<b style="color:var(--bull)">'+bullP.name.replace('支柱','')+'</b>（'+fmt(bullP.score)+' 分），'
+    + '主导逆风：<b style="color:var(--bear)">'+bearP.name.replace('支柱','')+'</b>（'+fmt(bearP.score)+' 分）。';
+  if(comp>=0.33){
+    hint += ' 建议结合验证层（CFTC 未极端拥挤、金银比偏高白银弹性强）分批进场，并以「实际利率拐点向上 + DXY 重上 99」作为窗口失效信号。';
+  } else if(comp<=-0.33){
+    hint += ' 建议控制敞口、以避险为主，待综合分回升至中性区上方再评估；可关注空头或对冲表达。';
+  } else {
+    hint += ' 多空均衡、信号不清晰，建议观望或极小仓试错，等待任一支柱出现明确突破。';
+  }
+  document.getElementById('entryHint').innerHTML = hint;
+
+  // 记录当前计算结果（供日历追踪捕获）
+  LAST.comp = comp;
+  LAST.band = band;
+  LAST.params = {}; PARAMS.forEach(p=> LAST.params[p.id] = p.val);
+  LAST.valid = {gsr: window._gsr};
+  syncToday();   // 确保今日日历格子与信号窗口实时对齐
+  if(trendChart) renderTrend();   // 今日实时变化时同步趋势图末点
+
+  // 仪表盘
+  gauge.setOption({
+    series:[{
+      type:'gauge', min:0, max:100, startAngle:210, endAngle:-30,
+      axisLine:{lineStyle:{width:18, color:[[0.17,'#3fae7a'],[0.335,'#5fbf94'],[0.665,'#5aa9ff'],[0.83,'#e8896f'],[1,'#e0533a']]}},
+      pointer:{width:5,length:'62%'},
+      axisTick:{show:false}, splitLine:{length:14,lineStyle:{color:'#2a3848'}},
+      axisLabel:{color:'#93a1b0',distance:20,fontSize:10,formatter:v=>v.toFixed(0)},
+      anchor:{show:true,size:10,itemStyle:{color:'#e0b13e'}},
+      detail:{valueAnimation:true,formatter:function(v){return v.toFixed(1)+' 分';},color:'auto',fontSize:24,offsetCenter:[0,'62%']},
+      title:{show:false},
+      data:[{value:+c100(comp).toFixed(1)}]
+    }]
+  });
+
+  // 三支柱条形（增强：权重标注 + 档位名 + 子参数明细 tooltip + 鲜明配色）
+  function barColor(v){
+    if(v>=0.33) return '#ff5a47';     // 看多 — 鲜红
+    if(v<=-0.33) return '#27d27e';    // 看空 — 鲜绿
+    return '#39a7ff';                  // 中性 — 亮蓝
+  }
+  const SHORT = {bond:'实际利率/美债', usd:'美元/政策', sov:'主权/避险'};
+  bars.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},
+      backgroundColor:'rgba(16,24,34,.96)',borderColor:'#2a3848',textStyle:{color:'#e6edf3',fontSize:12},
+      formatter:function(a){
+        const idx=a[0].dataIndex, pil=PILLARS[idx], ps=PARAMS.filter(x=>x.pillar===pil.key);
+        let s='<b style="color:'+barColor(pil.score)+'">'+pil.name+'</b>　支柱权重 '+(pil.w*100).toFixed(0)+'%<br/>'
+            +'支柱得分 <b>'+fmt(pil.score)+' 分</b>（子参数评分加权均值，0-100 制）<br/>'
+            +'<hr style="border-color:#2a3848;margin:5px 0"/>';
+        ps.forEach(x=>{ s+='· '+x.name+'：评分 '+fmt(x.score)+' 分 × '+(x.w*100).toFixed(0)+'%<br/>'; });
+        return s;
+      }},
+    grid:{left:172,right:104,top:16,bottom:26},
+    xAxis:{type:'value',min:0,max:100,
+      name:'看多金银   ← 0 空   ｜   50 中性   ｜   100 多 →', nameLocation:'middle', nameGap:36,
+      nameTextStyle:{color:'#9fb0c0',fontSize:11},
+      axisLabel:{color:'#93a1b0'},splitLine:{lineStyle:{color:'#243240'}}},
+    yAxis:{type:'category',
+      data:PILLARS.map(p=> p.name.charAt(2)+' · '+SHORT[p.key]+' ('+(p.w*100).toFixed(0)+'%)'),
+      axisLabel:{color:'#e6edf3',fontSize:11.5},axisLine:{lineStyle:{color:'#2a3848'}},axisTick:{show:false}},
+    series:[{
+      type:'bar',barWidth:'56%',
+      data:PILLARS.map(p=>({value:+c100(p.score).toFixed(1),
+        itemStyle:{color:barColor(p.score),borderRadius:[0,7,7,0],shadowBlur:10,shadowColor:'rgba(0,0,0,.45)'}})),
+      label:{show:true,position:'right',color:'#e6edf3',fontWeight:'bold',fontSize:12.5,
+        formatter:function(d){const v=d.value;return v.toFixed(1)+'  '+bandOf((v-50)/50).name;}},
+      markLine:{silent:true,symbol:'none',data:[{xAxis:50}],
+        lineStyle:{color:'#39a7ff',type:'dashed',width:1.6},
+        label:{color:'#9ccbff',fontSize:10,formatter:'中性 50'}}
+    }]
+  });
+}
+
+// ---------- 事件绑定 ----------
+// 任一参数被手动调整时，参数明细区的「获取时间」应明确转为「已手动调整」，避免误导客户
+function markAdjusted(){
+  const box=document.getElementById('paramUpdateTime');
+  const ptVal=document.getElementById('ptVal');
+  const ptSrc=document.getElementById('ptSrc');
+  if(box){ box.classList.add('manual'); box.classList.remove('stale'); }
+  if(ptVal) ptVal.textContent='已手动调整';
+  if(ptSrc) ptSrc.textContent='（当前为手动设置值，非自动获取时间对应的快照值）';
+  setParamDate(null, '已手动调整');
+}
+PARAMS.forEach(p=> document.getElementById(p.id).addEventListener('input', ()=>{ markAdjusted(); compute(); }));
+VALID.forEach(id=> document.getElementById(id).addEventListener('input', ()=>{ markAdjusted(); compute(); }));
+
+// 时钟（每秒走动）
+document.getElementById('clock').textContent = nowStr();
+setInterval(()=>{ document.getElementById('clock').textContent = nowStr(); }, 1000);
+
+// 手动刷新：强制重算并更新时间戳
+document.getElementById('refresh').addEventListener('click', ()=>{ compute(); renderGoldChart(); });
+
+// 自动刷新（30s 心跳）：重算模型并更新时间戳（无实时数据源时仅刷新评估时间）
+let autoTimer = null;
+document.getElementById('autoRefresh').addEventListener('change', function(){
+  if(this.checked && !autoTimer){ autoTimer = setInterval(compute, 30000); }
+  else if(!this.checked && autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+});
+
+document.getElementById('reset').addEventListener('click', function(){
+  PARAMS.forEach(p=> document.getElementById(p.id).value = p.def);
+  document.getElementById('gsr').value = 67;
+  setParamDate(null, '市场快照默认值');
+  markManualTime();
+  compute();
+});
+// ---------- 窗口日历追踪 ----------
+const LS_KEY = 'gold_window_log_v1';
+let LAST = {comp:0, band:BANDS[2], params:{}, valid:{gsr:67}};
+let CURRENT_PARAM_SOURCE = null;   // 当前评估器使用的参数来源日期（null=实时/默认）
+function loadLog(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){ return {}; } }
+function saveLog(o){ try{ localStorage.setItem(LS_KEY, JSON.stringify(o)); }catch(e){} }
+function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
+const calState = { log: loadLog(), archived:{}, y: new Date().getFullYear(), m: new Date().getMonth() };
+const ARC_CACHE = 'gold_window_arc_cache_v1';
+function loadArcCache(){ try{ return JSON.parse(localStorage.getItem(ARC_CACHE)||'{}'); }catch(e){ return {}; } }
+function saveArcCache(o){ try{ localStorage.setItem(ARC_CACHE, JSON.stringify(o)); }catch(e){} }
+
+function dstr(y,m,d){ const p=n=>String(n).padStart(2,'0'); return y+'-'+p(m+1)+'-'+p(d); }
+function flashCal(msg){
+  const el=document.getElementById('calFlash'); if(!el) return;
+  el.textContent=msg; el.style.opacity='1'; clearTimeout(el._t); el._t=setTimeout(()=>{el.style.opacity='0';},2400);
+}
+function renderCalendar(){
+  const y=calState.y, m=calState.m;
+  document.getElementById('calMonth').textContent = y+'-'+String(m+1).padStart(2,'0');
+  const first=new Date(y,m,1).getDay();
+  const dim=new Date(y,m+1,0).getDate();
+  const t=new Date(); const isCur=(t.getFullYear()===y && t.getMonth()===m);
+  let html='';
+  for(let i=0;i<first;i++) html+='<div class="cal-cell empty"></div>';
+  for(let d=1; d<=dim; d++){
+    const key=dstr(y,m,d);
+    const isToday=(isCur && d===t.getDate());
+    const rec=calState.log[key];
+    const arc=(!isToday)?(calState.archived[key]||null):null;   // 历史日优先归档；今日保留实时
+    const show=arc||rec;                                        // 显示数据源
+    const tmark=isToday?'<span class="dtoday">今</span>':'';
+    const arcMark=arc?'<span class="darc">📁</span>':'';
+    if(show){
+      const col=show.color||'#5aa9ff';
+      const gp = show.goldPrice!=null ? show.goldPrice : (isToday ? window.__goldPrice : null);
+      const goldLine = gp!=null ? '<div class="dgold">金价 '+Math.round(gp)+'</div>' : '';
+      html+='<div class="cal-cell has" data-key="'+key+'" style="border-color:'+col+';background:'+hexA(col,0.20)+'">'
+        + arcMark + tmark
+        + '<div class="dnum" style="color:'+col+'">'+d+'</div>'
+        + '<div class="dscore" style="color:'+col+'">'+fmt(show.comp)+'</div>'
+        + '<div class="dband" style="color:'+col+'">'+show.band+'</div>'
+        + '<div class="dact" style="color:'+col+'">'+(show.act||'')+'</div>'
+        + goldLine + '</div>';
+    } else {
+      html+='<div class="cal-cell"><span class="dnum">'+d+'</span>'+tmark+'</div>';
+    }
+  }
+  document.getElementById('calGrid').innerHTML=html;
+  document.querySelectorAll('#calGrid .cal-cell.has').forEach(el=>{
+    el.addEventListener('click', ()=> loadDayParams(el.getAttribute('data-key')));
+  });
+}
+// 颜色图例：把「窗口阈值与操作参考」映射到日期框配色，让颜色含义一目了然
+function buildCalLegend(){
+  const el=document.getElementById('calLegend'); if(!el) return;
+  el.innerHTML = BANDS.map(b=> '<span class="cal-chip"><span class="chip-dot" style="background:'+b.color+'"></span>'+b.name+' · '+b.short+'</span>').join('');
+}
+// ---------- 每日数据按日归档：服务端 history/{date}.json + index.json ----------
+// 纯函数复用 PARAMS 映射逻辑计算任意一日 params 的综合分/档位（不污染全局滑块）
+function evalParams(pp){
+  let n=0,d=0;
+  PARAMS.forEach(p=>{ const v=(pp&&pp[p.id]!=null)? pp[p.id] : p.def; const s=p.fn(v); n+=s*p.w; d+=p.w; });
+  const comp = d? n/d : 0;
+  return { comp, band: bandOf(comp) };
+}
+let trendChart=null;
+function renderTrend(){
+  if(!trendChart) trendChart = echarts.init(document.getElementById('trendChart'));
+  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  const pts=[];
+  Object.keys(calState.archived).forEach(k=>{ const a=calState.archived[k]; pts.push({date:k,comp:a.comp,color:a.color,band:a.band}); });
+  // 今日实时（若归档未覆盖今日）
+  if(LAST && LAST.comp!=null && !calState.archived[todayKey]){
+    pts.push({date:todayKey, comp:+LAST.comp.toFixed(3), color:LAST.band.color, band:LAST.band.name});
+  }
+  pts.sort((a,b)=> a.date<b.date?-1:1);
+  const recent = pts.slice(-30);
+  const note=document.getElementById('trendNote');
+  if(note) note.textContent = recent.length? '共 '+recent.length+' 个交易日（归档+今日实时），按日升序' : '暂无历史归档（每日自动化将逐日累积）';
+  trendChart.setOption({
+    grid:{left:38,right:20,top:16,bottom:26},
+    tooltip:{trigger:'axis', formatter:p=> p[0].axisValue+' ：'+p[0].data.toFixed(1)+' 分'},
+    xAxis:{type:'category', data:recent.map(p=>p.date.slice(5)), axisLabel:{color:'#93a1b0',fontSize:10}, axisLine:{lineStyle:{color:'#2a3848'}}},
+    yAxis:{type:'value', min:0, max:100, axisLabel:{color:'#93a1b0',fontSize:10,formatter:v=>v.toFixed(0)}, splitLine:{lineStyle:{color:'#2a3848'}}, axisLine:{lineStyle:{color:'#2a3848'}}},
+    series:[{
+      type:'line', smooth:true, data:recent.map(p=>+c100(p.comp).toFixed(1)),
+      lineStyle:{width:2,color:'#e6b855'}, itemStyle:{color:'#e6b855'},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(230,184,85,.28)'},{offset:1,color:'rgba(230,184,85,0)'}]}},
+      markLine:{silent:true,symbol:'none',data:[{yAxis:50}],lineStyle:{color:'#5aa9ff',type:'dashed'},label:{color:'#9ccbff',formatter:'中性 50'}},
+      markPoint:{symbol:'circle',symbolSize:8,data:recent.map((p,i)=>({coord:[i,+c100(p.comp).toFixed(1)],itemStyle:{color:p.color}}))}
+    }]
+  });
+}
+// 数据读取层：API 优先（独立后端），失败自动回退静态 JSON（云端静态版照常可用）
+async function apiFirst(urls){
+  for(const u of urls){
+    try{
+      const r = await fetch(u, {cache:'no-store'});
+      if(r.ok) return await r.json();
+    }catch(e){}
+  }
+  return null;
+}
+// ①窗口：纽约 COMEX 黄金价格变动曲线（日线，API 优先 / 静态 gold_kline.json 兜底）
+let goldChart=null;
+function renderGoldChart(){
+  if(!goldChart) goldChart = echarts.init(document.getElementById('goldChart'));
+  const note=document.getElementById('goldNote');
+  apiFirst(['/api/gold-kline', 'data/gold_kline.json']).then(j=>{
+    if(!j || !j.nodes || !j.nodes.length){ if(note) note.textContent='暂无黄金价格数据'; return; }
+    const nodes=j.nodes.slice().sort((a,b)=> a.date<b.date?-1:1);   // 按日期升序
+    const dates=nodes.map(n=>n.date.slice(5));
+    const closes=nodes.map(n=>+n.last);
+    const n=closes.length;
+    const last=closes[n-1], prev=(n>1?closes[n-2]:last);
+    const chg=last-prev, pct=prev? (chg/prev*100):0;
+    const up=chg>=0;
+    const col=up?'#ff5a47':'#27d27e';      // 中国习惯：红涨绿跌
+    if(note) note.innerHTML='最新 <b style="color:'+col+'">'+last.toFixed(0)+'</b> 美元/盎司 &nbsp;'+(up?'▲ +':'▼ ')+chg.toFixed(0)+' （'+(up?'+':'')+pct.toFixed(2)+'%）';
+    goldChart.setOption({
+      grid:{left:50,right:18,top:16,bottom:26},
+      tooltip:{trigger:'axis', formatter:function(p){ const i=p[0].dataIndex; const c=closes[i]; const pc=i>0?closes[i-1]:c; const d=(c-pc)/pc*100; return p[0].axisValue+'<br/>收盘：'+c.toFixed(0)+' 美元/盎司<br/>涨跌：'+(c>=pc?'+':'')+(c-pc).toFixed(0)+' （'+(c>=pc?'+':'')+d.toFixed(2)+'%）'; }},
+      xAxis:{type:'category', data:dates, axisLabel:{color:'#93a1b0',fontSize:10}, axisLine:{lineStyle:{color:'#2a3848'}}},
+      yAxis:{type:'value', scale:true, axisLabel:{color:'#93a1b0',fontSize:10,formatter:v=>v.toFixed(0)}, splitLine:{lineStyle:{color:'#2a3848'}}, axisLine:{lineStyle:{color:'#2a3848'}}},
+      dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,textStyle:{color:'#93a1b0'}}],
+      series:[{
+        type:'line', smooth:true, data:closes,
+        lineStyle:{width:2,color:col}, itemStyle:{color:col},
+        areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:up?'rgba(255,90,71,.30)':'rgba(39,210,126,.30)'},{offset:1,color:up?'rgba(255,90,71,0)':'rgba(39,210,126,0)'}]}},
+        markPoint:{symbol:'circle',symbolSize:7,data:[{coord:[n-1,last],itemStyle:{color:col}}]}
+      }]
+    });
+  }).catch(e=>{ if(note) note.textContent='黄金价格加载失败'; });
+}
+// 加载服务端归档（API 优先 / 静态 index.json+逐日归档兜底），合并进 calState.archived（历史日覆盖显示，今日保留实时）
+async function loadArchives(){
+  const cache=loadArcCache();
+  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  // 优先：独立后端 /api/history（一次性返回全部完整归档）
+  try{
+    const r=await fetch('/api/history',{cache:'no-store'});
+    if(r.ok){
+      const arr=await r.json();
+      if(Array.isArray(arr) && arr.length){
+        arr.forEach(h=>{
+          if(!h || !h.date || h.date===todayKey) return;   // 今日保留实时信号
+          const ev=(h.comp!=null)? null : evalParams(h.params||{});
+          const bb=h.band ? BANDS.find(x=>x.name===h.band) : null;   // band 名 → 档位（补 color/short）
+          calState.archived[h.date]={
+            comp: h.comp!=null? +h.comp : +ev.comp.toFixed(3),
+            band: h.band || ev.band.name,
+            color: h.bandColor || (bb&&bb.color) || ev.band.color,
+            act: h.bandShort || (bb&&bb.short) || ev.band.short,
+            goldPrice: h.goldPrice!=null? +h.goldPrice : null,
+            params: h.params||{}, valid: h.valid, source: h.source, updated: h.updated, date: h.date
+          };
+        });
+        renderCalendar(); renderTrend(); return;
+      }
+    }
+  }catch(e){}
+  // 兜底：静态 index.json + 逐日归档（云端静态版）
+  try{
+    const r=await fetch('data/history/index.json',{cache:'no-store'});
+    if(r.ok){
+      const idx=await r.json();
+      const dates=idx.dates||[];
+      const summary=idx.summary||{};
+      await Promise.all(dates.map(async dd=>{
+        if(calState.archived[dd]) return;
+        let arc=cache[dd];
+        if(!arc){
+          // 优先使用 index.summary（含 comp/band/color/act/goldPrice），避免逐日 fetch
+          const sum=summary[dd];
+          if(sum && sum.comp!=null && sum.band && sum.color){
+            arc={
+              comp:+ (+sum.comp).toFixed(3), band:sum.band, color:sum.color,
+              act:sum.act||'', goldPrice:sum.goldPrice!=null? +sum.goldPrice : null,
+              date:dd, summary:true
+            };
+          }
+        }
+        // 无论 summary 是否存在，都尝试 fetch 逐日归档以获取完整 params/valid（保证每日参数独立可载入）
+        try{
+          const rr=await fetch('data/history/'+dd+'.json',{cache:'no-store'});
+          if(rr.ok){
+            const snap=await rr.json();
+            const params=snap.params||{};
+            // 若 summary 已提供 comp/band/color/act，优先保留；否则用 params 重新计算
+            const ev=(arc&&arc.comp!=null)? null : evalParams(params);
+            arc={
+              comp:(arc&&arc.comp!=null)? arc.comp : +ev.comp.toFixed(3),
+              band:(arc&&arc.band)? arc.band : ev.band.name,
+              color:(arc&&arc.color)? arc.color : ev.band.color,
+              act:(arc&&arc.act)? arc.act : ev.band.short,
+              goldPrice:(arc&&arc.goldPrice!=null)? arc.goldPrice : (snap.goldPrice!=null? +snap.goldPrice : null),
+              params:params, valid:snap.valid, source:snap.source, updated:snap.updated, date:dd
+            };
+          }
+        }catch(e){}
+        if(arc){
+          cache[dd]=arc; saveArcCache(cache);
+          if(dd!==todayKey) calState.archived[dd]=arc;   // 历史日用归档覆盖；今日保留实时信号
+        }
+      }));
+    }
+  }catch(e){}
+  renderCalendar();
+  renderTrend();
+}
+function recordToday(manual){
+  const t=new Date(); const key=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  calState.log[key]={
+    comp:+LAST.comp.toFixed(3), band:LAST.band.name, color:LAST.band.color,
+    time:nowStr(), params:Object.assign({},LAST.params), valid:Object.assign({},LAST.valid),
+    act: LAST.band.short, auto: !manual,
+    goldPrice: window.__goldPrice!=null ? +window.__goldPrice : null
+  };
+  saveLog(calState.log); renderCalendar();
+  flashCal((manual?'已记录':'已自动记录')+'今日（'+key+'）窗口：'+LAST.band.name+' '+fmt(LAST.comp)+' 分');
+}
+// 点击日期：把该日独立存储的参数载入主评估器，并显示详情复盘
+function loadDayParams(key){
+  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  let data=null;
+  if(key===todayKey && LAST && LAST.params){
+    data={ params:LAST.params, valid:LAST.valid, comp:LAST.comp, band:LAST.band.name, color:LAST.band.color,
+           goldPrice: window.__goldPrice!=null? +window.__goldPrice : null,
+           time:nowStr()+'（实时信号窗口）', source:'当前信号窗口（实时）', from:'live' };
+  } else if(calState.archived[key] && calState.archived[key].params){
+    const a=calState.archived[key];
+    data={ params:a.params, valid:a.valid, comp:a.comp, band:a.band, color:a.color,
+           goldPrice:a.goldPrice!=null? +a.goldPrice : null,
+           time:(a.updated||'')+'（服务端归档）', source:a.source||'归档', from:'archive' };
+  } else if(calState.log[key]){
+    const r=calState.log[key];
+    data={ params:r.params, valid:r.valid, comp:r.comp, band:r.band, color:r.color,
+           goldPrice:r.goldPrice!=null? +r.goldPrice : null,
+           time:(r.time||'')+'（本机记录）', source:'本机 localStorage 记录', from:'local' };
+  }
+  if(!data){
+    flashCal('无 '+key+' 的参数记录'); return;
+  }
+
+  // 载入参数到评估器
+  PARAMS.forEach(pp=>{ if(data.params[pp.id]!=null) document.getElementById(pp.id).value=data.params[pp.id]; });
+  if(data.valid){
+    if(data.valid.gsr!=null) document.getElementById('gsr').value=data.valid.gsr;
+  }
+  compute();
+  setParamDate(key, key + (data.from==='archive'?'（归档）':data.from==='local'?'（本机）':'（实时）'));
+  // 更新参数获取时间区为历史日期来源，避免显示"已手动调整"造成误解
+  const box=document.getElementById('paramUpdateTime');
+  const ptVal=document.getElementById('ptVal');
+  const ptSrc=document.getElementById('ptSrc');
+  if(box){ box.classList.add('manual'); box.classList.remove('stale'); }
+  if(ptVal) ptVal.textContent = key;
+  if(ptSrc) ptSrc.textContent = '（已载入该日参数：'+data.source+' ｜ '+data.time+'）';
+  flashCal('已载入 '+key+' 参数到评估器');
+  showDayDetail(key);
+}
+
+// 让「今日」日历格子与信号窗口实时对齐：每次重算都同步最新综合分/评级/金价
+function syncToday(){
+  const t=new Date(); const key=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  const rec=calState.log[key];
+  if(!rec) return;                          // 今日无记录则不处理（由 autoRecordToday 负责创建）
+  const nc=+LAST.comp.toFixed(3);
+  if(rec.comp===nc && rec.band===LAST.band.name) return;  // 无变化不重写，避免无谓刷新
+  rec.comp=nc; rec.band=LAST.band.name; rec.color=LAST.band.color; rec.act=LAST.band.short;
+  rec.time=nowStr(); rec.params=Object.assign({},LAST.params); rec.valid=Object.assign({},LAST.valid);
+  if(window.__goldPrice!=null) rec.goldPrice=+window.__goldPrice;
+  saveLog(calState.log); renderCalendar();
+}
+async function showDayDetail(key){
+  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  let data=null;
+  if(key===todayKey && LAST && LAST.params){
+    data={ params:LAST.params, valid:LAST.valid, comp:LAST.comp, band:LAST.band.name, color:LAST.band.color,
+           goldPrice: window.__goldPrice!=null? +window.__goldPrice : null,
+           time:nowStr()+'（实时信号窗口）', source:'当前信号窗口（实时）', from:'live' };
+  } else if(calState.archived[key]){
+    const a=calState.archived[key];
+    data={ params:a.params, valid:a.valid, comp:a.comp, band:a.band, color:a.color,
+           goldPrice: a.goldPrice!=null? +a.goldPrice : null,
+           time:(a.updated||'')+'（服务端归档）', source:a.source||'归档', from:'archive' };
+  } else if(calState.log[key]){
+    const r=calState.log[key];
+    data={ params:r.params, valid:r.valid, comp:r.comp, band:r.band, color:r.color,
+           goldPrice: r.goldPrice!=null? +r.goldPrice : null,
+           time:(r.time||'')+'（本机记录）', source:'本机 localStorage 记录', from:'local' };
+  }
+  if(!data){
+    try{
+      const rr=await fetch('data/history/'+key+'.json',{cache:'no-store'});
+      if(rr.ok){
+        const snap=await rr.json(); const ev=evalParams(snap.params||{});
+        data={ params:snap.params, valid:snap.valid, comp:ev.comp, band:ev.band.name, color:ev.band.color,
+               goldPrice: snap.goldPrice!=null? +snap.goldPrice : null,
+               time:(snap.updated||'')+'（归档·按需加载）', source:snap.source||'归档', from:'archive' };
+      }
+    }catch(e){}
+  }
+  if(!data){ flashCal('无 '+key+' 的数据记录'); return; }
+  const rows=PARAMS.map(pp=>{
+    const v=data.params[pp.id]; const sc=pp.fn(v);
+    return '<tr><td>'+pp.name+'</td><td>'+(pp.unit==='%'? (+v).toFixed(2)+'%' : (pp.unit==='t'? (+v).toFixed(0)+'t' : v))+'</td>'
+      +'<td style="color:'+toneColor(sc)+'">'+fmt(sc)+'</td></tr>';
+  }).join('');
+  const det=document.getElementById('calDetail');
+  det.style.display='block';
+  const srcTag = data.from==='live'?'🟢 实时':(data.from==='archive'?'📁 归档':'💾 本机');
+  const gpHtml = data.goldPrice!=null
+    ? '<div style="color:var(--gold);font-size:12px;font-weight:600;margin-bottom:6px">🪙 当日 COMEX 金价：'+Math.round(data.goldPrice)+' 美元/盎司</div>'
+    : '';
+  det.innerHTML='<span class="cal-close" id="calClose">✕ 关闭</span>'
+    + '<h4>'+key+' · '+data.band+'（'+fmt(data.comp)+' 分）</h4>'
+    + gpHtml
+    + '<div style="color:var(--muted);font-size:11.5px;margin-bottom:8px">数据来源：'+srcTag+' '+data.source+' ｜ '+data.time+'</div>'
+    + '<table><tr><th>参数</th><th>当时值</th><th>映射得分（0-100）</th></tr>'+rows+'</table>'
+    + '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">'
+    + '<button class="btn" id="calLoad">载入此日参数到评估器</button>'
+    + (data.from==='local'? '<button class="btn" id="calDel" style="background:var(--bear);color:#06281a">删除此本机记录</button>' : '')
+    + '</div>';
+  document.getElementById('calClose').addEventListener('click', ()=> det.style.display='none');
+  document.getElementById('calLoad').addEventListener('click', ()=>{
+    PARAMS.forEach(pp=>{ if(data.params[pp.id]!=null) document.getElementById(pp.id).value=data.params[pp.id]; });
+    if(data.valid){ document.getElementById('gsr').value=data.valid.gsr; }
+    compute(); det.style.display='none'; flashCal('已载入 '+key+' 参数到评估器');
+  });
+  const calDelBtn=document.getElementById('calDel');
+  if(calDelBtn) calDelBtn.addEventListener('click', ()=>{
+    delete calState.log[key]; saveLog(calState.log); renderCalendar(); det.style.display='none'; flashCal('已删除 '+key+' 本机记录');
+  });
+}
+document.getElementById('calRecord').addEventListener('click', ()=> recordToday(true));
+document.getElementById('calPrev').addEventListener('click', ()=>{ calState.m--; if(calState.m<0){calState.m=11;calState.y--;} renderCalendar(); });
+document.getElementById('calNext').addEventListener('click', ()=>{ calState.m++; if(calState.m>11){calState.m=0;calState.y++;} renderCalendar(); });
+renderCalendar();
+
+buildBandRef();
+buildCalLegend();
+
+// ---------- 启动时自动加载每日快照（data/snapshot.json） ----------
+function setSourceNote(txt){ const el=document.getElementById('dataSrc'); if(el) el.textContent=txt; }
+function applySnapshot(s){
+  const p = s.params || {};
+  PARAMS.forEach(pp=>{ if(p[pp.id]!=null) document.getElementById(pp.id).value = p[pp.id]; });
+  if(s.valid){
+    if(s.valid.gsr!=null) document.getElementById('gsr').value = s.valid.gsr;
+  }
+  window.__snapDate = s.date || null;
+  setParamDate(s.date, (s.date||'快照')+'（市场快照）');
+  setSourceNote('数据来源：'+(s.source||'自动')+' ｜ 更新于 '+(s.updated||''));
+  const snapHint = document.getElementById('snapDateHint');
+  if(snapHint) snapHint.textContent = (s.date||'—') + (s.stale ? '（数据可能滞后）' : '');
+  // 参数明细区：显示这些参数值的获取时间
+  const box = document.getElementById('paramUpdateTime');
+  const ptVal = document.getElementById('ptVal');
+  const ptSrc = document.getElementById('ptSrc');
+  if(box){ box.classList.remove('manual'); box.classList.toggle('stale', !!s.stale); }
+  if(ptVal) ptVal.textContent = s.updated || '未知';
+  let srcTxt = '（来源：'+(s.source||'自动')+(s.date? ' ｜ 数据日期：'+s.date : '');
+  if(s.stale) srcTxt += ' ｜ ⚠ 本次获取失败，显示最近成功值，数据可能滞后';
+  srcTxt += '）';
+  if(ptSrc) ptSrc.textContent = srcTxt;
+  renderFreshness(s);
+}
+// 渲染「数据来源与更新频率」面板：让客户清楚每项参数值的获得时间/来源/频率
+function renderFreshness(s){
+  const grid=document.getElementById('srcGrid'); if(!grid) return;
+  const f=s.freshness||{};
+  const nameOf={}; PARAMS.forEach(p=> nameOf[p.id]=p.name);
+  const order=['vix','dxy','gsr','ffr','ust10y','ust2y','tips','twi','ratediff','cb','gpr','fiscal','etf'];
+  let html='';
+  order.forEach(id=>{
+    const fr=f[id]; const nm=nameOf[id]||id;
+    if(!fr){ html+='<div class="src-cell"><div class="sc-name">'+nm+'</div><div class="sc-meta">—</div></div>'; return; }
+    const fc = /日/.test(fr.freq)?'daily' : (/周/.test(fr.freq)?'weekly' : (/月|季/.test(fr.freq)?'quarter':'manual'));
+    html+='<div class="src-cell"><div class="sc-name">'+nm+'</div>'
+      + '<div class="sc-src">'+fr.src+'</div>'
+      + '<div class="sc-meta">获得时间：'+(fr.date||'—')+'</div>'
+      + '<span class="sc-freq '+fc+'">'+fr.freq+'</span></div>';
+  });
+  grid.innerHTML=html;
+}
+// 未加载实时快照时，明确告知用户当前为手动/默认设置，而非某次获取的时间点
+function markManualTime(){
+  const box = document.getElementById('paramUpdateTime');
+  const ptVal = document.getElementById('ptVal');
+  const ptSrc = document.getElementById('ptSrc');
+  if(box){ box.classList.add('manual'); box.classList.remove('stale'); }
+  if(ptVal) ptVal.textContent = '未加载实时快照';
+  if(ptSrc) ptSrc.textContent = '（当前为市场快照默认值，非某次实时获取，详见「⑦ 关键变量设置」）';
+  const grid=document.getElementById('srcGrid');
+  if(grid) grid.innerHTML='<div class="src-cell" style="grid-column:1/-1"><div class="sc-name">未加载实时快照</div><div class="sc-meta">当前为手动/默认值，无「数据来源与获取时间」记录。详见「⑦ 关键变量设置」。</div></div>';
+}
+// 预加载当日 COMEX 金价（供日历格子、详情、今日自动记录使用）
+async function loadGoldPrice(){
+  try{
+    const j=await apiFirst(['/api/gold-kline', 'data/gold_kline.json']);
+    const nodes=(j && (j.data ? j.data.nodes : j.nodes)) || [];
+    if(!nodes.length) return;
+    nodes.sort((a,b)=> a.date<b.date?-1:1);
+    const last=nodes[nodes.length-1];
+    if(last && last.last!=null) window.__goldPrice = +last.last;
+  }catch(e){}
+}
+async function loadSnapshotThenCompute(){
+  const snap = await apiFirst(['/api/snapshot', 'data/snapshot.json']);
+  if(snap){ applySnapshot(snap); }
+  else { setSourceNote('手动/默认（未找到快照）'); markManualTime(); }
+  await loadGoldPrice();   // 先拿金价，再记录今日，日历才能显示金价
+  compute();
+  autoRecordToday();
+  loadArchives();   // 加载服务端按日归档（API 优先），合并进日历格子与趋势图（跨设备可追溯）
+  renderGoldChart(); // ①窗口：纽约 COMEX 黄金价格变动曲线
+}
+function autoRecordToday(){
+  const t = new Date();
+  const key = dstr(t.getFullYear(), t.getMonth(), t.getDate());
+  if(calState.log[key]){ syncToday(); return; }   // 已有记录：同步到当前信号窗口
+  recordToday(false);                              // 无记录：按当前（快照/默认）参数创建今日自动记录
+  flashCal('已自动记录今日（'+key+'）窗口');
+}
+
+loadSnapshotThenCompute();
+</script>
+</body>
+</html>

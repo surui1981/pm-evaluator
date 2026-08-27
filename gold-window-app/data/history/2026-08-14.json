@@ -1,0 +1,46 @@
+{
+  "archivedAt": "2026-08-25 09:27:16",
+  "updated": "2026-08-14 15:30:00",
+  "date": "2026-08-14",
+  "goldPrice": 4432,
+  "source": "腾讯自选股(黄金/白银/美元指数/联邦基金利率) + 美国财政部(10Y/2Y) + FRED(贸易加权美元/TIPS/欧央行利率,免key) + MarketWatch(VIX) + 世界黄金协会(央行购金)",
+  "stale": false,
+  "note": "历史金价回填：当日 COMEX 黄金收盘价已按 gold_kline.json 补录；其余参数（利率/美元/央行购金等）无免费历史日频 API，暂沿用最近完整快照（2026-08-24）基准值，仅用于保持日历与趋势连续展示。",
+  "provenance": {
+    "goldPrice": "COMEX黄金 fuGC 2026-08-14 收盘 = 4432 美元/盎司 (gold_kline.json 回填)",
+    "backfill": "其余参数沿用 2026-08-24 快照基准，待后续接入历史数据后替换",
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所大行财报披露基准)"
+  },
+  "freshness": {
+    "goldPrice": {
+      "src": "gold_kline.json 历史日线",
+      "freq": "日频",
+      "date": "2026-08-14"
+    },
+    "backfill": {
+      "src": "最近完整快照",
+      "freq": "一次性回填",
+      "date": "2026-08-24"
+    }
+  },
+  "params": {
+    "tips": 2.4,
+    "ust10y": 4.74,
+    "ust2y": 4.24,
+    "ffr": 3.75,
+    "curve": 0.5,
+    "dxy": 98.91,
+    "twi": 118.9,
+    "ratediff": 1.5,
+    "cb": 289,
+    "gpr": 55,
+    "fiscal": 60,
+    "vix": 15.13,
+    "etf": 3
+  },
+  "valid": {
+    "gsr": 68.1
+  },
+  "score100": 54.6,
+  "_score100_note": "100 分制窗口分（50=中性），由 params 按统一口径计算"
+}

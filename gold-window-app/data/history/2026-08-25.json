@@ -1,0 +1,109 @@
+{
+  "updated": "2026-08-26 08:43:21",
+  "date": "2026-08-25",
+  "goldPrice": 4716,
+  "source": "腾讯自选股(黄金/白银/美元指数/联邦基金利率) + 美国财政部(10Y/2Y) + FRED(贸易加权美元/TIPS/欧央行利率,免key) + MarketWatch(VIX) + 世界黄金协会(央行购金)",
+  "stale": false,
+  "note": "当日金价由 COMEX 黄金 fuGC 日线收盘价回填；其余参数沿用 2026-08-24 最新完整快照。",
+  "provenance": {
+    "gold_silver": "腾讯自选股 fuGC=4701.4 / fuSI=68.52 (实时, 2026-08-26)",
+    "goldPrice": "COMEX黄金 fuGC 2026-08-25 收盘 = 4716 美元/盎司 (腾讯自选股)",
+    "dxy": "腾讯自选股 fxDINIW=98.91 (实时, 2026-08-26 08:45)",
+    "ffr": "腾讯自选股 macro_us_monetary 联邦基金利率目标上限 3.75% (2026-07-30)",
+    "ust10y": "美国财政部 Daily Treasury Par Yield Curve 10Y CMT=4.64% (2026-08-25, 免key)",
+    "ust2y": "美国财政部 Daily Treasury Par Yield Curve 2Y CMT=4.17% (2026-08-25, 免key)",
+    "gsr": "派生 = 黄金/白银 = 4701.4/68.52 = 68.61 (实时)",
+    "curve": "派生 = ust10y - ust2y = 0.47",
+    "tips": "FRED T10YIE(10Y盈亏平衡)=2.32% 派生: ust10y - T10YIE = 4.64-2.32 = 2.32% (2026-08-25, 免key)",
+    "twi": "FRED DTWEXBGS 贸易加权美元指数=118.0628 (2026-08-21, 免key, 官方滞后约1周)",
+    "ratediff": "FRED ECBDFR 欧央行存款便利利率=2.25% 派生: ffr - ECB = 3.75-2.25 = 1.5% (2026-08-25, 免key)",
+    "vix": "MarketWatch CBOE VIX=15.13 (2026-08-21 收盘, 免费页面; 2026-08-26 页面需JS未能刷新, 沿用前值)",
+    "cb": "世界黄金协会(WGC) 2026 Q2 全球央行净购金=289t (数据截至 2026-06-30, 季频)",
+    "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核)",
+    "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核)",
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所大行财报披露基准)"
+  },
+  "freshness": {
+    "vix": {
+      "src": "MarketWatch",
+      "freq": "日频",
+      "date": "2026-08-21"
+    },
+    "dxy": {
+      "src": "腾讯自选股 fxDINIW",
+      "freq": "日频",
+      "date": "2026-08-26"
+    },
+    "gsr": {
+      "src": "腾讯自选股 金银价派生",
+      "freq": "日频",
+      "date": "2026-08-25"
+    },
+    "ffr": {
+      "src": "腾讯自选股 macro_us_monetary",
+      "freq": "日频",
+      "date": "2026-07-30"
+    },
+    "ust10y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-08-25"
+    },
+    "ust2y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-08-25"
+    },
+    "tips": {
+      "src": "FRED T10YIE 派生(免key)",
+      "freq": "日频",
+      "date": "2026-08-25"
+    },
+    "twi": {
+      "src": "FRED DTWEXBGS(免key)",
+      "freq": "日频(滞后~1周)",
+      "date": "2026-08-21"
+    },
+    "ratediff": {
+      "src": "FRED ECBDFR 派生(免key)",
+      "freq": "日频",
+      "date": "2026-08-25"
+    },
+    "cb": {
+      "src": "世界黄金协会 WGC Q2 2026",
+      "freq": "季频",
+      "date": "2026-06-30"
+    },
+    "gpr": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "月频复核",
+      "date": "基准55"
+    },
+    "fiscal": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "季频复核",
+      "date": "基准60"
+    }
+  },
+  "params": {
+    "tips": 2.32,
+    "ust10y": 4.64,
+    "ust2y": 4.17,
+    "ffr": 3.75,
+    "curve": 0.47,
+    "dxy": 98.91,
+    "twi": 118.0628,
+    "ratediff": 1.5,
+    "cb": 289,
+    "gpr": 55,
+    "fiscal": 60,
+    "vix": 15.13,
+    "etf": 3
+  },
+  "valid": {
+    "gsr": 68.61
+  },
+  "archivedAt": "2026-08-26 08:43:21（回填）",
+  "score100": 54.6,
+  "_score100_note": "100 分制窗口分（50=中性），由 params 按统一口径计算"
+}
