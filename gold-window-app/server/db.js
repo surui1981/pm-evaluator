@@ -123,10 +123,12 @@ function getHistory(date){
   return row ? JSON.parse(row.payload) : null;
 }
 function listKline(limit){
-  let sql = 'SELECT date,last,open,high,low,volume,amount FROM kline ORDER BY date ASC';
+  // kline 表会跨多次 migrate 累积所有历史节点（>limit 行），必须取「最新 limit 条」而非最旧。
+  // 先按日期降序取最近 limit 条，再反转为升序，保证图表始终展示最新窗口。
+  let sql = 'SELECT date,last,open,high,low,volume,amount FROM kline ORDER BY date DESC';
   if(limit) sql += ' LIMIT ?';
   const rows = limit ? db.prepare(sql).all(limit) : db.prepare(sql).all();
-  return rows;
+  return rows.reverse();
 }
 function counts(){
   return {

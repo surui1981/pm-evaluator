@@ -150,7 +150,7 @@ function scheduleDaily(){
 // ---- 启动 ----
 const migrated = db.migrateFromJson();
 console.log('[migrate] 迁移完成:', JSON.stringify(migrated));
-app.listen(PORT, '127.0.0.1', () => {
+app.listen(PORT, process.env.HOST || '0.0.0.0', () => {
   console.log(`PM-Evaluator 后端已启动: http://127.0.0.1:${PORT}`);
   console.log(`  API: /api/health /api/snapshot /api/history /api/gold-kline /api/bands`);
   scheduleDaily();
