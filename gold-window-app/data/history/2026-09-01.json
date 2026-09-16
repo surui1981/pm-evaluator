@@ -1,0 +1,118 @@
+{
+  "updated": "2026-09-01 00:31:12",
+  "date": "2026-09-01",
+  "goldPrice": 4438,
+  "source": "腾讯自选股连接器(westock-mcp)本次不可用 → 行情改经 TradingEconomics(WebFetch,免key)获取: COMEX黄金4438.42 / 白银66.386 / DXY 99.421；美国财政部日频曲线(2Y/10Y,免key)；FRED(DFEDTARU联邦基金目标上限 / T10YIE→TIPS / DTWEXBGS贸易加权美元 / ECBDFR欧央行利率,免key)；MarketWatch(VIX,免key)；世界黄金协会(央行购金,沿用)。",
+  "stale": false,
+  "note": "westock-mcp 连接器在本会话不可用（未提供 MCP 工具），按任务允许的替代通道全部经 WebFetch(免key)刷新。已确认/新取：美国财政部日频曲线(08-28, 2Y=4.34/10Y=4.73，与上次一致)；TIPS=FRED T10YIE(2.31)派生=2.42；TWI=FRED DTWEXBGS 重取确认=118.0628(08-21)；美欧利差=FRED ECBDFR 重取确认=2.25(08-31)→ratediff=1.50；联邦基金目标上限=FRED DFEDTARU=3.75(最新完整行)。VIX 经 MarketWatch 成功新取=15.19(08-31 11:20 CDT 延迟，较上次14.43上行)；DXY 经 TradingEconomics 新取=99.421(08-31，较上次沿用值98.91上行)；COMEX黄金/白银经 TradingEconomics 新取=4438.42/66.386(08-31)。央行购金 cb(WGC 404 未获)沿用 289t(Q2'26)；gpr/fiscal/etf 为结构性判断基准沿用。综合分 comp=0.032 较上次0.077下移，主因 DXY 上行(98.91→99.421, mapDXY 0.5→0.1) 与 VIX 上行(14.43→15.19, -0.2→0.1) 抵消了部分利多，得分仍处中性区间。",
+  "provenance": {
+    "gold_silver": "TradingEconomics(WebFetch,免key) 黄金4438.42 / 白银66.386 (2026-08-31)；westock-mcp fuGC/fuSI 不可用",
+    "goldPrice": "COMEX黄金: TradingEconomics 现货/期货参考价 4438.42 美元/盎司 (2026-08-31, westock-mcp fuGC 不可用改经 WebFetch 获取)，取整=4438",
+    "dxy": "美元指数 DXY: TradingEconomics 货币表 99.421 (2026-08-31, 新取；westock-mcp data_forex 不可用)",
+    "ffr": "联邦基金利率目标上限: FRED DFEDTARU 最新完整行=3.75% (2026-01-23 为最后完整值，2026年内 FOMC 维持；westock-mcp macro_us_monetary 不可用)",
+    "ust10y": "美国财政部 Daily Treasury Par Yield Curve 10Y CMT=4.73% (2026-08-28, 免key, 与上次一致)",
+    "ust2y": "美国财政部 Daily Treasury Par Yield Curve 2Y CMT=4.34% (2026-08-28, 免key, 与上次一致)",
+    "gsr": "派生 = 黄金/白银 = 4438.42/66.386 = 66.86 (TradingEconomics, 2026-08-31)",
+    "curve": "派生 = ust10y - ust2y = 4.73-4.34 = 0.39",
+    "tips": "FRED T10YIE(10Y盈亏平衡)=2.31% 派生: ust10y - T10YIE = 4.73-2.31 = 2.42% (2026-08-28, 免key, 与上次一致)",
+    "twi": "FRED DTWEXBGS 贸易加权美元指数=118.0628 (2026-08-21, 免key, 本次重取确认与上次一致，官方滞后约1周)",
+    "ratediff": "FRED ECBDFR 欧央行存款便利利率=2.25% 派生: ffr - ECB = 3.75-2.25 = 1.50% (ECBDFR 2026-08-31 重取确认, 免key)",
+    "vix": "MarketWatch VIX=15.19 (2026-08-31 11:20 a.m. CDT 延迟报价，本次 WebFetch 成功新取，较上次14.43上行)",
+    "cb": "世界黄金协会(WGC) 本次页面 404 未能获取季度净购金，沿用上次快照 2026 Q2 全球央行净购金=289t",
+    "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核)",
+    "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核)",
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准)"
+  },
+  "freshness": {
+    "vix": {
+      "src": "MarketWatch",
+      "freq": "日频",
+      "date": "2026-08-31"
+    },
+    "dxy": {
+      "src": "TradingEconomics(WebFetch, westock-mcp 不可用)",
+      "freq": "日频",
+      "date": "2026-08-31"
+    },
+    "gsr": {
+      "src": "TradingEconomics 金银价派生(WebFetch)",
+      "freq": "日频",
+      "date": "2026-08-31"
+    },
+    "ffr": {
+      "src": "FRED DFEDTARU(免key, westock-mcp 不可用)",
+      "freq": "日频",
+      "date": "2026-01-23(年内维持)"
+    },
+    "ust10y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-08-28"
+    },
+    "ust2y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-08-28"
+    },
+    "tips": {
+      "src": "FRED T10YIE 派生(免key)",
+      "freq": "日频",
+      "date": "2026-08-28"
+    },
+    "twi": {
+      "src": "FRED DTWEXBGS(免key)",
+      "freq": "日频(滞后~1周)",
+      "date": "2026-08-21"
+    },
+    "ratediff": {
+      "src": "FRED ECBDFR 派生(免key)",
+      "freq": "日频",
+      "date": "2026-08-31"
+    },
+    "cb": {
+      "src": "世界黄金协会 WGC Q2 2026(本次未获,沿用)",
+      "freq": "季频",
+      "date": "2026-06-30"
+    },
+    "etf": {
+      "src": "纽约交易所大行财报披露(GLD持仓/流量)",
+      "freq": "季频(大行财报)",
+      "date": "2026 Q2"
+    },
+    "gpr": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "月频复核",
+      "date": "基准55"
+    },
+    "fiscal": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "季频复核",
+      "date": "基准60"
+    }
+  },
+  "params": {
+    "tips": 2.42,
+    "ust10y": 4.73,
+    "ust2y": 4.34,
+    "ffr": 3.75,
+    "curve": 0.39,
+    "dxy": 99.421,
+    "twi": 118.0628,
+    "ratediff": 1.5,
+    "cb": 289,
+    "gpr": 55,
+    "fiscal": 60,
+    "vix": 15.19,
+    "etf": 3
+  },
+  "valid": {
+    "gsr": 66.86
+  },
+  "score100": 51.6,
+  "_score100_note": "100 分制窗口分（50=中性），由 params 实时计算口径一致",
+  "comp": 0.032,
+  "band": "中性窗口",
+  "color": "#5aa9ff",
+  "act": "观望",
+  "archivedAt": "2026-08-31T16:39:02.719Z"
+}
