@@ -1,0 +1,12 @@
+{
+  "name": "gold-window-app",
+  "version": "0.4.0",
+  "private": true,
+  "description": "贵金属投资窗口预期评估器 (PM-Evaluator) - 前端 + 独立后端 API",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

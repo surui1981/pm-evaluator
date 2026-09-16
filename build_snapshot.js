@@ -1,0 +1,111 @@
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+const DATA = 'C:/Users/EDY/WorkBuddy/2026-08-21-09-10-03/gold-window-app/data';
+const HIST = path.join(DATA, 'history');
+
+// ---- Run timestamp (runtime TZ is already GMT+8, use local getters directly) ----
+function p(n){ return String(n).padStart(2,'0'); }
+const now = new Date();
+const updated = `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())} ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
+const today = `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())}`;
+const archivedAt = `${now.getFullYear()}-${p(now.getMonth()+1)}-${p(now.getDate())}T${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}+08:00`;
+
+// ---- Values (from WebFetch 免key, 2026-09-04 为最新交易日; 周末无新session) ----
+const goldPrice = 4429;          // Kitco 现货金 Bid 4429.10 取整
+const silver    = 66.09;
+const gsr       = 67.02;          // 4429.10 / 66.09
+const goldLow   = 4365.80, goldHigh = 4491.30;
+const dxy = 99.176;
+const ffr = 3.75;                 // FRED DFEDTARU 2026-09-06
+const ust10y = 4.78, ust2y = 4.37;
+const curve = 0.41;               // 4.78 - 4.37
+const tips = 2.43;                // 4.78 - T10YIE(2.35)
+const twi = 118.7479;             // FRED DTWEXBGS 2026-08-28 沿用
+const ratediff = 1.5;             // 3.75 - ECBDFR(2.25)
+const vix = 14.53;                // MarketWatch WebFetch 被 JS 拦截 → 沿用上次快照值
+const cb = 289, gpr = 55, fiscal = 60, etf = 3;
+
+const params = { tips, ust10y, ust2y, ffr, curve, dxy, twi, ratediff, cb, gpr, fiscal, vix, etf };
+
+const lib = require('C:/Users/EDY/WorkBuddy/2026-08-21-09-10-03/gold-window-app/server/lib.js');
+const ev = lib.evalParams(params);
+const comp = ev.comp, score100 = ev.score100, band = ev.band.name, act = ev.band.short, color = ev.band.color;
+
+const source = "Kitco 现货金/银(WebFetch,免key) 黄金 4429.10 / 白银 66.09 (2026-09-04 17:00 NY 收盘)；TradingEconomics(WebFetch,免key) DXY 99.176 (2026-09-04)；美国财政部日频收益率曲线(2Y/10Y CMT, 2026-09-04, 免key)；FRED(DFEDTARU 联邦基金目标上限 / T10YIE→TIPS / DTWEXBGS 贸易加权美元 / ECBDFR 欧央行利率, 免key)；MarketWatch(VIX 本次 WebFetch 被 JS 拦截, 沿用上次 14.53)；世界黄金协会(季频央行购金, 页面仅提供 xlsx 下载, 沿用)。westock-mcp 连接器本环境不可用，全部行情经 WebFetch(免key) 刷新，零付费账号/API key。";
+
+const note = "westock-mcp 连接器在本环境不可用（data_futures/data_forex/data_macro/data_kline 均未注册，westock CLI 亦未安装），按任务允许的替代通道全部经 WebFetch(免key) 刷新。本次为 2026-09-07 周一例行刷新：最新 NY 交易日仍为 2026-09-04（周末无新 session），所有可用源返回数值与 2026-09-06 运行完全一致——Kitco 现货金 4429.10 / 银 66.09、Treasury 2Y=4.37/10Y=4.78→curve=0.41、FRED T10YIE=2.35→tips=2.43、TradingEconomics DXY=99.176、DTWEXBGS=118.7479(08-28 官方未出新值 沿用)、ECBDFR=2.25/DFEDTARU=3.75→ratediff=1.50、gpr/fiscal/etf 结构性沿用。唯一例外：MarketWatch VIX 页面本次 WebFetch 被「请启用 JS/禁用广告拦截」拦截无法解析，按任务兜底沿用上次快照值 14.53（2026-09-04）。综合分 comp="+comp+"、score100="+score100+"，维持中性窗口/观望，与上一运行持平（周末无新数据驱动参数跨映射阈值）。宏观主线不变：8 月非农增 16.2 万远超预期、失业率 4.1%，美元与美债收益率反弹，金价自 4500 附近回落至 4429；市场关注本周通胀数据与 9 月 FOMC。";
+
+const provenance = {
+  gold_silver: "Kitco 现货金/银 Bid: 黄金 4429.10 / 白银 66.09 美元/盎司 (2026-09-04 17:00 NY 收盘, WebFetch免key)；westock-mcp fuGC/fuSI 不可用",
+  goldPrice: "COMEX黄金: Kitco 现货金 Bid 4429.10 美元/盎司 (2026-09-04 17:00 NY 收盘)，取整=4429。westock-mcp data_kline(fuGC) 与 data_futures(fuGC) 均不可用，按任务兜底改经 WebFetch 获取现货金作为 COMEX 参考价",
+  dxy: "美元指数 DXY: TradingEconomics 99.176 (2026-09-04, WebFetch免key, 与上次持平；westock-mcp data_forex 不可用)",
+  ffr: "联邦基金利率目标上限: FRED DFEDTARU 最新完整行=3.75% (2026-09-06, 年内 FOMC 维持；westock-mcp macro_us_monetary 不可用)",
+  ust10y: "美国财政部 Daily Treasury Par Yield Curve 10Y CMT=4.78% (2026-09-04, 免key)",
+  ust2y: "美国财政部 Daily Treasury Par Yield Curve 2Y CMT=4.37% (2026-09-04, 免key)",
+  gsr: "派生 = 黄金/白银 = 4429.10/66.09 = 67.02 (Kitco, 2026-09-04)",
+  curve: "派生 = ust10y - ust2y = 4.78-4.37 = 0.41",
+  tips: "FRED T10YIE(10Y盈亏平衡)=2.35% 派生: ust10y - T10YIE = 4.78-2.35 = 2.43% (2026-09-04, 免key)",
+  twi: "FRED DTWEXBGS 贸易加权美元指数=118.7479 (2026-08-28, 免key, 官方本次未发布新值, 沿用上次同值；官方滞后约1周)",
+  ratediff: "FRED ECBDFR 欧央行存款便利利率=2.25% 派生: ffr - ECB = 3.75-2.25 = 1.5% (ECBDFR 2026-09-04, 免key)",
+  vix: "MarketWatch VIX: 本次 WebFetch 被「Please enable JS and disable any ad blocker」拦截无法解析 → 按任务兜底沿用上次快照值 14.53 (2026-09-04, WebFetch免key)",
+  cb: "世界黄金协会(WGC) Gold Demand Trends 页面确认最新已发布季度为 Q2 2026(数据截至2026-06-30)，净购金明细仅封装在 GDT_Tables_Q2'26 xlsx 内、页面无可解析数值，沿用 Q2 2026 全球央行净购金=289t",
+  gpr: "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核；沿用)",
+  fiscal: "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核；沿用)",
+  etf: "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准沿用)"
+};
+
+const freshness = {
+  vix: { src: "MarketWatch(本次 WebFetch 失败, 沿用上次)", freq: "日频", date: "2026-09-04" },
+  dxy: { src: "TradingEconomics(WebFetch, westock-mcp 不可用)", freq: "日频", date: "2026-09-04" },
+  gsr: { src: "Kitco 金银价派生(WebFetch)", freq: "日频", date: "2026-09-04" },
+  ffr: { src: "FRED DFEDTARU(免key, westock-mcp 不可用)", freq: "日频", date: "2026-09-06" },
+  ust10y: { src: "美国财政部日频曲线(免key)", freq: "日频", date: "2026-09-04" },
+  ust2y: { src: "美国财政部日频曲线(免key)", freq: "日频", date: "2026-09-04" },
+  tips: { src: "FRED T10YIE 派生(免key)", freq: "日频", date: "2026-09-04" },
+  twi: { src: "FRED DTWEXBGS(免key, 本次无新值沿用)", freq: "日频(滞后~1周)", date: "2026-08-28" },
+  ratediff: { src: "FRED ECBDFR 派生(免key)", freq: "日频", date: "2026-09-04" },
+  cb: { src: "世界黄金协会 WGC Q2 2026(页面仅 xlsx, 沿用)", freq: "季频", date: "2026-06-30" },
+  etf: { src: "纽约交易所大行财报披露(GLD持仓/流量)", freq: "季频(大行财报)", date: "2026 Q2" },
+  gpr: { src: "结构性判断(无免费日频)", freq: "月频复核", date: "基准55" },
+  fiscal: { src: "结构性判断(无免费日频)", freq: "季频复核", date: "基准60" }
+};
+
+const snapshot = {
+  updated, date: today, goldPrice, source, stale:false, note,
+  provenance, freshness,
+  params, valid:{ gsr },
+  score100, _score100_note:"100 分制窗口分（50=中性），由 server/lib.js evalParams() 实时计算口径一致",
+  comp, band, color, act
+};
+
+// 1) snapshot.json
+fs.writeFileSync(path.join(DATA,'snapshot.json'), JSON.stringify(snapshot,null,2)+'\n','utf8');
+
+// 2) history/<today>.json
+const archive = Object.assign({}, snapshot, { archivedAt });
+fs.writeFileSync(path.join(HIST, today+'.json'), JSON.stringify(archive,null,2)+'\n','utf8');
+
+// 3) history/index.json update
+const idxPath = path.join(HIST,'index.json');
+const idx = JSON.parse(fs.readFileSync(idxPath,'utf8'));
+idx.updated = updated;
+if(!idx.dates.includes(today)){
+  idx.dates.push(today);
+  idx.dates.sort(); // ascending, dedup already by includes check
+}
+idx.summary[today] = { comp, band, color, act, goldPrice, score100 };
+// remove any duplicate entries just in case
+idx.dates = [...new Set(idx.dates)].sort();
+fs.writeFileSync(idxPath, JSON.stringify(idx,null,2)+'\n','utf8');
+
+// 4) gold_kline.json — 末节点已为 2026-09-04（周末无新session），保持现状，仅校验
+const k = JSON.parse(fs.readFileSync(path.join(DATA,'gold_kline.json'),'utf8'));
+if(k.data.nodes[k.data.nodes.length-1].date !== '2026-09-04'){
+  console.error('WARN: kline last node not 09-04:', k.data.nodes[k.data.nodes.length-1].date);
+} else {
+  console.log('kline unchanged, last node 2026-09-04, count', k.data.nodes.length);
+}
+
+console.log('DONE date='+today+' updated='+updated+' comp='+comp+' score100='+score100+' band='+band+' dates='+idx.dates.length);
