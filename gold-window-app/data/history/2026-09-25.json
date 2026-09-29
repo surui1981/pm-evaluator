@@ -1,0 +1,118 @@
+{
+  "archivedAt": "2026-09-25T00:30:22+08:00",
+  "updated": "2026-09-25 08:30",
+  "date": "2026-09-25",
+  "goldPrice": 4248,
+  "source": "Kitco 现货金/银(WebFetch,免key) 黄金 4247.60 / 白银 63.07 (2026-09-24 11:33 ET, 全球 OTC 现货盘周三盘中)；TradingEconomics(WebFetch,免key) DXY 101.18 (2026-09-24)；美国财政部日频收益率曲线(2Y/10Y CMT, 最新发布日 2026-09-23, 免key)；FRED(DFEDTARU 联邦基金目标上限 4.00% 09-24 / T10YIE→TIPS / DTWEXBGS 贸易加权美元 / ECBDFR 欧央行利率 2.50% 09-24, 免key)；MarketWatch(VIX 15.18, WebFetch 成功解析 2026-09-23 收盘)。westock-mcp 连接器本环境不可用，全部行情经 WebFetch(免key) 刷新，零付费账号/API key。",
+  "stale": false,
+  "note": "westock-mcp 连接器在本环境不可用（data_futures/data_forex/data_macro/data_kline 均未注册，westock CLI 亦未安装），按任务允许的替代通道全部经 WebFetch(免key) 刷新，零付费账号/API key。本次为 2026-09-25 例行刷新（每日 08:30 自动化）：运行时刻 00:30 GMT+8 对应纽约周三 2026-09-24 12:30 EDT，最新 NY 交易日为 2026-09-24 周三盘中，取到新鲜行情——Kitco 现货金 4247.60 / 白银 63.07（金价取整 4248，较 9/24 运行的 4285.20/64.51 回落 -0.88%/-2.23%，gsr 66.38→67.36）；DXY 101.18（TradingEconomics，连续站上 101 整数关，mapDXY 维持 -0.3）；美国财政部曲线大幅上移至 2Y=4.85/10Y=5.11（10Y 突破 5% 整数关→mapUst10 由 -0.7 跳至 -1.0，curve 由 0.25 走阔至 0.26 仍 mapCurve -0.4）；T10YIE 2.35→tips=2.76（突破2.5阈值仍 mapTIPS -1，10Y破5推高）；DTWEXBGS 维持 119.5133(09-18 滞后)；ECBDFR 维持 2.50(09-24)→ratediff=1.50；FFR 维持 4.00(DFEDTARU 09-24)；MarketWatch VIX 本次 WebFetch 成功解析 15.18（重站 15 阈值，mapVIX 由 -0.2 跳至 0.1）。关键变化：10Y 收益率突破 5% 触发 mapUst10 由 -0.7 跳至 -1.0(-0.3×0.08=-0.024)，部分被 VIX 回升穿 15 触发 mapVIX -0.2→0.1(+0.3×0.05=+0.015) 抵消 → comp 由 -0.102 下修至 -0.111、score100 由 44.9 降至 44.5，仍处中性窗口·观望（comp 未破 -0.33，但空头权重创近期新低）。宏观主线：美元走强(>101)+实际利率抬升(10Y 破5%、TIPS 2.76)持续压制黄金，金价自 4285 一线回落至 4248。kline 日线补 2026-09-24 节点(4247.60, 区间 4244.00~4304.10)，滚动剔除 2026-04-06，维持 120 条升序。",
+  "provenance": {
+    "gold_silver": "Kitco 现货金/银 Bid: 黄金 4247.60 / 白银 63.07 美元/盎司 (2026-09-24 11:33 ET, WebFetch免key)；westock-mcp fuGC/fuSI 不可用",
+    "goldPrice": "COMEX黄金参考价: Kitco 现货金 Bid 4247.60 美元/盎司 (2026-09-24 11:33 ET 周三盘中), 取整=4248。westock-mcp data_kline(fuGC) 与 data_futures(fuGC) 均不可用，按任务兜底改经 WebFetch 获取现货金作为 COMEX 参考价；gold_kline 末节点补 2026-09-24",
+    "dxy": "美元指数 DXY: TradingEconomics 101.18 (取 101.185 四舍五入, 2026-09-24, WebFetch免key, 连续站上101；westock-mcp data_forex 不可用)",
+    "ffr": "联邦基金利率目标上限: FRED DFEDTARU 最新完整行=4.00% (2026-09-24；FOMC 9/16-17 加息25bp至 3.75%-4.00% 后维持；westock-mcp macro_us_monetary 不可用)",
+    "ust10y": "美国财政部 Daily Treasury Par Yield Curve 10Y CMT=5.11% (2026-09-23, 免key, 10Y 突破5%整数关)",
+    "ust2y": "美国财政部 Daily Treasury Par Yield Curve 2Y CMT=4.85% (2026-09-23, 免key, 较上次4.71走高)",
+    "gsr": "派生 = 黄金/白银 = 4247.60/63.07 = 67.36 (Kitco, 2026-09-24)",
+    "curve": "派生 = ust10y - ust2y = 5.11-4.85 = 0.26",
+    "tips": "FRED T10YIE(10Y盈亏平衡)=2.35% 派生: ust10y - T10YIE = 5.11-2.35 = 2.76% (2026-09-23, 免key)",
+    "twi": "FRED DTWEXBGS 贸易加权美元指数=119.5133 (2026-09-18, 免key, 官方尚未更新至最新日)",
+    "ratediff": "FRED ECBDFR 欧央行存款便利利率=2.50% (2026-09-24 刷新, 免key) 派生: ffr - ECB = 4.00-2.50 = 1.50%",
+    "vix": "MarketWatch VIX: 15.18 (2026-09-23 收盘, WebFetch 成功解析, 站上15阈值；westock-mcp 不可用)",
+    "cb": "世界黄金协会(WGC) Gold Demand Trends 页面确认最新已发布季度为 Q2 2026(数据截至2026-06-30)，净购金明细仅封装在 GDT_Tables_Q2'26 xlsx 内、页面无可解析数值，沿用 Q2 2026 全球央行净购金=289t",
+    "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核；沿用)",
+    "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核；沿用)",
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准沿用)"
+  },
+  "freshness": {
+    "vix": {
+      "src": "MarketWatch(WebFetch, 2026-09-23 收盘)",
+      "freq": "日频",
+      "date": "2026-09-23"
+    },
+    "dxy": {
+      "src": "TradingEconomics(WebFetch, westock-mcp 不可用)",
+      "freq": "日频",
+      "date": "2026-09-24"
+    },
+    "gsr": {
+      "src": "Kitco 金银价派生(WebFetch)",
+      "freq": "日频",
+      "date": "2026-09-24"
+    },
+    "ffr": {
+      "src": "FRED DFEDTARU(免key, westock-mcp 不可用)",
+      "freq": "日频",
+      "date": "2026-09-24"
+    },
+    "ust10y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-09-23"
+    },
+    "ust2y": {
+      "src": "美国财政部日频曲线(免key)",
+      "freq": "日频",
+      "date": "2026-09-23"
+    },
+    "tips": {
+      "src": "FRED T10YIE 派生(免key)",
+      "freq": "日频",
+      "date": "2026-09-23"
+    },
+    "twi": {
+      "src": "FRED DTWEXBGS(免key)",
+      "freq": "日频(滞后~数日)",
+      "date": "2026-09-18"
+    },
+    "ratediff": {
+      "src": "FRED ECBDFR 派生(免key)",
+      "freq": "日频",
+      "date": "2026-09-24"
+    },
+    "cb": {
+      "src": "世界黄金协会 WGC Q2 2026(页面仅 xlsx, 沿用)",
+      "freq": "季频",
+      "date": "2026-06-30"
+    },
+    "etf": {
+      "src": "纽约交易所大行财报披露(GLD持仓/流量)",
+      "freq": "季频(大行财报)",
+      "date": "2026 Q2"
+    },
+    "gpr": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "月频复核",
+      "date": "基准55"
+    },
+    "fiscal": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "季频复核",
+      "date": "基准60"
+    }
+  },
+  "params": {
+    "tips": 2.76,
+    "ust10y": 5.11,
+    "ust2y": 4.85,
+    "ffr": 4,
+    "curve": 0.26,
+    "dxy": 101.18,
+    "twi": 119.5133,
+    "ratediff": 1.5,
+    "cb": 289,
+    "gpr": 55,
+    "fiscal": 60,
+    "vix": 15.18,
+    "etf": 3
+  },
+  "valid": {
+    "gsr": 67.36
+  },
+  "score100": 44.5,
+  "_score100_note": "100 分制窗口分（50=中性），由 server/lib.js evalParams() 实时计算口径一致",
+  "comp": -0.111,
+  "band": "中性窗口",
+  "color": "#5aa9ff",
+  "act": "观望"
+}
