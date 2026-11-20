@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>贵金属投资窗口预期 · 交互评估器 v0.2</title>
+<title>贵金属投资窗口预期 · 交互评估器 v0.6.4</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <style>
   :root{
@@ -32,16 +32,59 @@
   .field label{font-size:13px;color:var(--txt)}
   .field .wtag{font-size:10.5px;color:var(--muted);margin-left:6px}
   .field .hint{font-size:11px;color:var(--muted)}
-  .field .val{font-size:15px;font-weight:700}
+  .field .val{font-size:17px;font-weight:700}
   input[type=range]{width:100%;accent-color:var(--gold);height:4px;cursor:pointer}
   .signal{text-align:center;border-radius:14px;padding:18px;margin-bottom:14px;
     border:1px solid var(--line);background:var(--panel2)}
-  .signal .big{font-size:30px;font-weight:800;letter-spacing:1px}
-  .signal .desc{font-size:13px;color:var(--muted);margin-top:4px}
+  .signal .big{font-size:40px;font-weight:800;letter-spacing:1px}
+  .signal .desc{font-size:14px;color:var(--muted);margin-top:4px}
+  /* v0.6 趋势评估卡：独立于主分的确认层 */
+  .trend-card{margin-bottom:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:14px 16px}
+  .trend-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .trend-title{font-size:14px;color:var(--gold);font-weight:600}
+  .trend-title .tbadge{font-size:10px;color:var(--muted);font-weight:400;margin-left:6px}
+  .trend-phase{font-size:20px;font-weight:800;letter-spacing:.5px}
+  .trend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+  .trend-metric{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .trend-metric .tm-k{font-size:11px;color:var(--muted)}
+  .trend-metric .tm-v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .trend-confl{margin:10px 0;padding:9px 11px;border-radius:8px;font-size:13px;border:1px solid var(--line)}
+  .trend-triggers{margin-top:8px}
+  .trend-triggers .tt-head{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .tt-item{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;color:var(--muted)}
+  .tt-item.met{color:var(--txt)}
+  .tt-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:10px;flex:none}
+  .tt-item.met .tt-dot{background:var(--bull);border-color:var(--bull);color:#fff}
+  .trend-analog{margin-top:10px;font-size:12px;line-height:1.7;color:var(--muted);border-top:1px dashed var(--line);padding-top:9px}
+  /* 历史泡沫周期金价路径参照（独立确认层，不计入主分） */
+  .cycle-card{margin-bottom:16px}
+  .cycle-note{background:rgba(90,169,255,.08);border:1px solid rgba(90,169,255,.32);border-radius:8px;
+    padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--txt);line-height:1.55}
+  .cycle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media(max-width:900px){.cycle-grid{grid-template-columns:1fr}}
+  .cycle-panel{border:1px solid var(--line);border-radius:9px;background:var(--panel2);padding:10px 12px}
+  .cp-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .cp-title{font-size:13.5px;color:var(--gold);font-weight:700}
+  .cp-badge{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:1px 7px}
+  .cp-sub{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 2px}
+  .cp-chart{height:235px}
+  .cp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}
+  .cp-stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+  .cp-stat .k{font-size:10px;color:var(--muted)}
+  .cp-stat .v{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+  .cycle-overlay{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+  .co-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .co-title{font-size:13px;color:var(--gold);font-weight:700}
+  .co-note{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .co-chart{height:300px}
+  .cycle-read{margin-top:8px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;
+    background:var(--panel);font-size:12px;line-height:1.7;color:var(--muted)}
+  .cycle-fit{margin-top:7px;padding:9px 11px;border:1px solid rgba(199,146,234,.32);border-radius:8px;
+    background:rgba(199,146,234,.07);font-size:12px;line-height:1.75;color:var(--txt)}
   .gauge{width:100%;height:220px}
   .bars{width:100%;height:210px}
-  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
-  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left}
   th{background:var(--panel2);color:var(--gold);font-weight:600}
   tr:nth-child(even){background:#13202c}
   .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;font-weight:600}
@@ -115,6 +158,8 @@
   .statusbar b{color:var(--txt)}
   .statusbar .btn{margin:0;padding:4px 12px;font-size:12px}
   .statusbar label{cursor:pointer;display:flex;align-items:center;gap:5px}
+  .statusbar select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:12px;cursor:pointer}
+  .statusbar .rf{color:var(--muted);font-variant-numeric:tabular-nums}
   details.pillar{border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin-bottom:12px;background:var(--panel2)}
   details.pillar>summary{cursor:pointer;color:var(--gold);font-size:13.5px;font-weight:600;padding:6px 0}
   details.pillar .prow{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:4px}
@@ -133,6 +178,19 @@
   .cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
   .cal-week span{text-align:center;font-size:12px;color:var(--muted)}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  /* 日历主体：左侧网格 + 右侧每日金价清单 */
+  .cal-layout{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:14px;align-items:start}
+  .cal-goldside{border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px 11px;position:sticky;top:12px}
+  .cal-goldside h4{margin:0 0 8px;font-size:13px;color:var(--gold);display:flex;justify-content:space-between;align-items:baseline}
+  .cal-goldside h4 small{font-size:10.5px;color:var(--muted);font-weight:400}
+  .cal-goldlist{max-height:520px;overflow-y:auto;padding-right:3px}
+  .cal-goldrow{display:flex;justify-content:space-between;align-items:baseline;gap:6px;padding:5px 7px;margin-bottom:4px;
+    border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;background:var(--panel);cursor:pointer;transition:filter .15s}
+  .cal-goldrow:hover{filter:brightness(1.2)}
+  .cal-goldrow .gr-date{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cal-goldrow .gr-price{font-size:16px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+  .cal-goldrow .gr-mark{font-size:10px;color:var(--muted);margin-left:2px}
+  .cal-goldside .gs-empty{font-size:12px;color:var(--muted);padding:10px 2px}
   .cal-cell{position:relative;min-height:88px;border:1px solid var(--line);border-radius:8px;
     background:var(--panel2);padding:6px 8px;font-size:12px}
   .cal-cell.empty{background:transparent;border-color:transparent}
@@ -142,7 +200,7 @@
   .cal-cell .dscore{font-size:13px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
   .cal-cell .dband{font-size:10.5px;margin-top:1px}
   .cal-cell .dact{font-size:10px;font-weight:600;margin-top:2px;opacity:.92}
-  .cal-cell .dgold{font-size:10px;margin-top:3px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;opacity:.95}
+  .cal-cell .dgold{font-size:13px;margin-top:4px;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums;opacity:1}
   .cal-cell .dtoday{position:absolute;top:5px;right:7px;font-size:9px;color:var(--gold);font-weight:700}
   .cal-cell .darc{position:absolute;top:4px;left:6px;font-size:10px;opacity:.85;line-height:1}
   .gold-chart-card{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px 12px}
@@ -152,6 +210,26 @@
   .cal-trend{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px 12px}
   .cal-trend-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12.5px;color:var(--txt)}
   .cal-trend-note{font-size:11px;color:var(--muted)}
+  .trend-table-wrap{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+  .trend-table-wrap>summary{cursor:pointer;font-size:12.5px;color:var(--gold);list-style:none;user-select:none}
+  .trend-table-wrap>summary::-webkit-details-marker{display:none}
+  .trend-table-wrap>summary::before{content:'▸';display:inline-block;margin-right:6px;transition:transform .15s}
+  .trend-table-wrap[open]>summary::before{transform:rotate(90deg)}
+  .trend-tbl-note{font-size:11.5px;color:var(--muted);line-height:1.6;margin:8px 0}
+  .trend-tbl-scroll{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+  .trend-tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .trend-tbl th,.trend-tbl td{padding:6px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  .trend-tbl th{position:sticky;top:0;background:var(--panel);color:var(--muted);font-size:11.5px;font-weight:500;z-index:1}
+  .trend-tbl th:first-child,.trend-tbl td:first-child{text-align:left}
+  .trend-tbl td:nth-child(3),.trend-tbl td:nth-child(4){text-align:center}
+  .trend-tbl tbody tr:hover{background:var(--panel)}
+  .trend-tbl .tt-score{font-size:15px;font-weight:600}
+  .trend-tbl .tt-old{color:var(--muted)}
+  .trend-tbl .tt-diff{font-size:12px}
+  .trend-tbl .tt-diff.down{color:var(--bear)}
+  .trend-tbl .tt-diff.up{color:var(--bull)}
+  .trend-tbl .tt-diff.flat{color:var(--muted)}
+  .trend-tbl .tt-stress{color:var(--gold)}
   .cal-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11.5px;color:var(--txt)}
   .cal-chip{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 9px}
   .chip-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -159,6 +237,7 @@
   .cal-detail h4{margin:0 0 8px;color:var(--gold);font-size:13px}
   .cal-detail .cal-close{float:right;cursor:pointer;color:var(--muted);font-size:12px}
   .cal-detail .cal-close:hover{color:var(--bull)}
+  @media(max-width:720px){.cal-layout{grid-template-columns:1fr}.cal-goldside{position:static}.cal-goldlist{max-height:300px}}
   @media(max-width:560px){.cal-cell{min-height:64px}}
 </style>
 </head>
@@ -179,7 +258,7 @@
   <div style="margin-bottom:8px">
     <span class="tag">金融服务 · 贵金属衍生品</span>
     <span class="tag">投资窗口预期评估器</span>
-    <span class="tag">v0.4</span>
+    <span class="tag">v0.6.4</span>
   </div>
   <h1>贵金属投资窗口预期 · 交互评估器（全面参数版）</h1>
   <div class="sub">覆盖美元指数 / 美元利率 / 美债各期限收益率 / 央行购金 / GLD ETF 资金流 / 地缘与避险等 13 项黄金定价因子，按典型经验赋权，字体颜色区分利多（红）/ 利空（绿）/ 中性（灰）。</div>
@@ -188,7 +267,16 @@
     <span>数据来源：<b id="dataSrc">手动/默认</b></span>
     <span>参数日期：<b id="paramDate">—</b></span>
     <span>最后评估：<b id="lastEval">—</b></span>
-    <label><input type="checkbox" id="autoRefresh" /> 自动刷新（30s 心跳）</label>
+    <label>自动刷新
+      <select id="refreshInterval" title="自动重新拉取快照并重绘的间隔">
+        <option value="0">关闭</option>
+        <option value="30">30 秒</option>
+        <option value="600" selected>10 分钟</option>
+        <option value="3600">1 小时</option>
+        <option value="21600">6 小时</option>
+      </select>
+    </label>
+    <span class="rf" id="refreshInfo">未启动</span>
     <button class="btn" id="refresh">手动刷新</button>
   </div>
 </header>
@@ -205,10 +293,18 @@
   </div>
   <div class="cal-note">按「窗口阈值与操作参考」为每日着色：日期框颜色 = 当日综合分对应档位（<b style="color:#e0533a">红=强多</b> / <b style="color:#e8896f">橙=偏多</b> / <b style="color:#5aa9ff">蓝=中性</b> / <b style="color:#5fbf94">绿=偏空</b> / <b style="color:#3fae7a">深绿=强空</b>），日期框内数值为 <b>0~100 分制窗口分</b>（50=中性），并标注操作参考，逐日追踪判断轨迹；<b>点击任意有记录日期</b>，会立即把该日独立存储的参数代入上方评估器重新计算，并在详情面板复盘当日完整参数与金价。数据仅存于本机浏览器（localStorage），不上传、不共享。</div>
   <div class="cal-flash" id="calFlash"></div>
-  <div class="cal-week">
-    <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+  <div class="cal-layout">
+    <div>
+      <div class="cal-week">
+        <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <div class="cal-goldside" id="calGoldSide">
+      <h4>每日金价 <small id="goldSideCount">—</small></h4>
+      <div class="cal-goldlist" id="calGoldList"><div class="gs-empty">加载中…</div></div>
+    </div>
   </div>
-  <div class="cal-grid" id="calGrid"></div>
   <div class="cal-legend" id="calLegend"></div>
   <div class="gold-chart-card">
     <div class="gold-chart-head">
@@ -220,8 +316,46 @@
   <div class="cal-trend">
     <div class="cal-trend-head"><span>📈 近期综合分趋势（数值追踪）</span><span class="cal-trend-note" id="trendNote">加载中…</span></div>
     <div id="trendChart" style="height:170px"></div>
+    <details class="trend-table-wrap" id="trendTableWrap">
+      <summary>📋 新版核算明细（近 30 日 · v0.6 口径 + 旧口径对照）</summary>
+      <div class="trend-tbl-note" id="trendTableNote">按当前模型对每日归档参数统一重算（含 VIX 状态化）。「旧口径」为归档当日快照值，保留作对照，不改写历史数据。</div>
+      <div class="trend-tbl-scroll"><table class="trend-tbl" id="trendTable"><thead><tr>
+        <th>日期</th><th>新口径分</th><th>档位</th><th>状态</th><th>金价</th><th>旧口径分</th><th>差值</th>
+      </tr></thead><tbody id="trendTableBody"><tr><td colspan="7">加载中…</td></tr></tbody></table></div>
+    </details>
   </div>
   <div class="cal-detail" id="calDetail" style="display:none"></div>
+</div>
+
+<!-- ============ 历史泡沫周期 · 金价路径参照（独立确认层，不计入主分） ============ -->
+<div class="card cycle-card" id="cycleCard">
+  <div class="cal-head">
+    <h3 style="color:var(--gold)">📚 历史泡沫周期 · 金价路径参照（仅作参考，不计入主分）</h3>
+    <span class="cal-trend-note" id="cycleMeta">加载中…</span>
+  </div>
+  <div class="cycle-note">
+    两图为<b>月均价</b>（世界银行 Pink Sheet 口径；日线极值另行标注）：<b>2000 互联网泡沫</b>破裂初期，金价随风险资产回落约 13%，约 14 个月后才见底；<b>2008 房地产泡沫</b>中黄金先冲高再遭流动性挤兑，回撤约 21%，政策转向后走出主升浪。下方归一化图把各周期「金价阶段高点」对齐为 100，叠加当前 2026 周期月均价路径与一条<b style="color:#c792ea">紫色虚线（经济周期均值 + 康波长波拟合，向前 30 个月）</b>，用于观察回撤节奏、修复位置与平均路径参照，<b>不代表未来必然复制历史</b>。
+  </div>
+  <div class="cycle-grid">
+    <div class="cycle-panel">
+      <div class="cp-head"><span class="cp-title">2000 互联网泡沫 · 金价变化区间</span><span class="cp-badge">1999-01 ~ 2003-12 · 月均价</span></div>
+      <div class="cp-sub" id="dotcomSub">加载中…</div>
+      <div class="cp-chart" id="dotcomChart"></div>
+      <div class="cp-stats" id="dotcomStats"></div>
+    </div>
+    <div class="cycle-panel">
+      <div class="cp-head"><span class="cp-title">2008 房地产泡沫 · 金价变化区间</span><span class="cp-badge">2006-01 ~ 2012-12 · 月均价</span></div>
+      <div class="cp-sub" id="gfcSub">加载中…</div>
+      <div class="cp-chart" id="gfcChart"></div>
+      <div class="cp-stats" id="gfcStats"></div>
+    </div>
+  </div>
+  <div class="cycle-overlay">
+    <div class="co-head"><span class="co-title">📈 归一化路径叠加 · 金价阶段高点 = 100</span><span class="co-note" id="cycleOverlayNote">当前周期由 data/gold_kline.json 日线按自然月聚合（末月为不完整月）；绿色曲线＝实际金价日线真实收盘</span></div>
+    <div class="co-chart" id="cycleOverlay"></div>
+    <div class="cycle-read" id="cycleRead"></div>
+    <div class="cycle-fit" id="cycleFitNote">平均拟合（经济周期 + 康波长波）计算中…</div>
+  </div>
 </div>
 
 <div class="grid g2">
@@ -232,6 +366,17 @@
     <div class="signal" id="signal">
       <div class="big" id="sigText">—</div>
       <div class="desc" id="sigDesc"></div>
+    </div>
+    <!-- v0.6 趋势评估模块：独立于 main comp 的确认层（2000 泡沫类比） -->
+    <div class="trend-card" id="trendCard">
+      <div class="trend-head">
+        <span class="trend-title">📈 趋势评估 · 周期阶段<span class="tbadge">独立确认层 · 不计入窗口信号主分</span></span>
+        <span class="trend-phase" id="trPhase">—</span>
+      </div>
+      <div class="trend-grid" id="trGrid"></div>
+      <div class="trend-confl" id="trConfl">趋势数据加载中…</div>
+      <div class="trend-triggers" id="trTriggers"></div>
+      <div class="trend-analog" id="trAnalog"></div>
     </div>
     <div id="gauge" class="gauge"></div>
     <div id="bars" class="bars"></div>
@@ -299,20 +444,49 @@
 <script>
 // ---------- 评分映射（内部 -1~+1：+1=强利多金价，-1=强利空；对外展示统一为 0~100 分制，50=中性）----------
 
-function mapTIPS(v){ if(v>=2.5)return -1; if(v>=2.0)return -0.8; if(v>=1.0)return -0.4; if(v>=0)return 0.1; if(v>=-0.5)return 0.6; return 1; }
-function mapUst10(v){ if(v>=5.0)return -1; if(v>=4.5)return -0.7; if(v>=4.0)return -0.3; if(v>=3.0)return 0.1; if(v>=2.0)return 0.5; return 1; }
-function mapUst2(v){ if(v>=5.5)return -1; if(v>=5.0)return -0.6; if(v>=4.5)return -0.2; if(v>=3.5)return 0.3; if(v>=2.5)return 0.7; return 1; }
-function mapFFR(v){ if(v>=5.5)return -1; if(v>=5.0)return -0.6; if(v>=4.5)return -0.2; if(v>=3.5)return 0.3; if(v>=2.5)return 0.7; return 1; }
-function mapCurve(s){ if(s<=-0.8)return 1; if(s<=-0.2)return 0.6; if(s<=0.2)return 0.1; if(s<=1.0)return -0.4; return -1; }
-function mapDXY(v){ if(v>=105)return -1; if(v>=103)return -0.7; if(v>=101)return -0.3; if(v>=99)return 0.1; if(v>=97)return 0.5; return 0.9; }
-function mapTWI(v){ if(v>=130)return -1; if(v>=125)return -0.6; if(v>=120)return -0.1; if(v>=115)return 0.4; return 0.8; }
-function mapRateDiff(d){ if(d>=3.0)return -1; if(d>=2.0)return -0.5; if(d>=1.0)return 0.0; if(d>=0)return 0.4; return 1; }
-function mapCB(t){ if(t>=300)return 0.9; if(t>=200)return 0.6; if(t>=100)return 0.3; if(t>=0)return -0.1; return -0.8; }
-function mapGPR(g){ if(g>=70)return 0.9; if(g>=50)return 0.5; if(g>=30)return 0.1; return -0.3; }
-function mapFiscal(r){ if(r>=70)return 0.9; if(r>=50)return 0.5; if(r>=30)return 0.1; return -0.2; }
-function mapVIX(v){ if(v>=30)return 0.9; if(v>=22)return 0.5; if(v>=15)return 0.1; return -0.2; }
-function mapGSR(v){ if(v>=85)return 0.8; if(v>=75)return 0.4; if(v>=65)return 0.0; if(v>=55)return -0.3; return -0.7; }
-function mapETF(v){ if(v>=8)return 0.8; if(v>=3)return 0.4; if(v>=0)return 0.1; if(v>=-5)return -0.3; return -0.8; }
+// v0.6.4：与 server/lib.js 完全同源的「保锚点分段线性」映射——阈值处取值不变，段内线性插值，
+// 解决阶梯映射下同一区间内日度变化被抹平、日历评估指数连续多日一字不变的问题。
+function ramp(points){
+  const pts = points.slice().sort((a,b)=>a[0]-b[0]);
+  return function(v){
+    if(!isFinite(v)) return pts[0][1];
+    if(v <= pts[0][0]) return pts[0][1];
+    for(let i=1;i<pts.length;i++){
+      if(v <= pts[i][0]){
+        const x0=pts[i-1][0], y0=pts[i-1][1], x1=pts[i][0], y1=pts[i][1];
+        if(x1===x0) return y1;
+        return Math.round((y0+(y1-y0)*(v-x0)/(x1-x0))*10000)/10000;
+      }
+    }
+    return pts[pts.length-1][1];
+  };
+}
+const mapTIPS     = ramp([[-1,1],[-0.5,0.6],[0,0.1],[1,-0.4],[2,-0.8],[2.5,-1],[3,-1]]);
+const mapUst10    = ramp([[1,1],[2,0.5],[3,0.1],[4,-0.3],[4.5,-0.7],[5,-1],[6,-1]]);
+const mapUst2     = ramp([[1,1],[2.5,0.7],[3.5,0.3],[4.5,-0.2],[5,-0.6],[5.5,-1],[6,-1]]);
+const mapFFR      = ramp([[1,1],[2.5,0.7],[3.5,0.3],[4.5,-0.2],[5,-0.6],[5.5,-1],[6,-1]]);
+const mapCurve    = ramp([[-1.5,1],[-0.8,1],[-0.2,0.6],[0.2,0.1],[1,-0.4],[2,-1]]);
+const mapDXY      = ramp([[90,0.9],[97,0.5],[99,0.1],[101,-0.3],[103,-0.7],[105,-1],[108,-1]]);
+const mapTWI      = ramp([[105,0.8],[115,0.4],[120,-0.1],[125,-0.6],[130,-1],[135,-1]]);
+const mapRateDiff = ramp([[-1,1],[0,0.4],[1,0],[2,-0.5],[3,-1],[4,-1]]);
+const mapCB       = ramp([[-50,-0.8],[0,-0.1],[100,0.3],[200,0.6],[300,0.9],[400,0.9]]);
+const mapGPR      = ramp([[0,-0.3],[30,0.1],[50,0.5],[70,0.9],[100,0.9]]);
+const mapFiscal   = ramp([[0,-0.2],[30,0.1],[50,0.5],[70,0.9],[100,0.9]]);
+// v0.5 状态化 VIX：默认"恐慌→避险利多"；权益外溢状态下"恐慌→流动性挤兑利空"
+const mapVIXNormal= ramp([[10,-0.2],[15,0.1],[22,0.5],[30,0.9],[45,0.9]]);
+const mapVIXStress= ramp([[10,0.2],[15,0],[22,-0.3],[30,-0.6],[45,-0.6]]);
+// regime 判别（纯函数，供归档重算用）：10Y 名义收益率≥5% 且 DXY≥103，或 VIX≥30 → 权益外溢
+function stressOf(p){
+  p = p || {};
+  const y=(p.ust10y!=null?+p.ust10y:null), dx=(p.dxy!=null?+p.dxy:null), vx=(p.vix!=null?+p.vix:null);
+  return (y!=null && dx!=null && y>=5 && dx>=103) || (vx!=null && vx>=30);
+}
+// regime 判别（实时路径，读当前滑块值）
+function isEquityStress(){ return stressOf({ust10y:document.getElementById('ust10y').value, dxy:document.getElementById('dxy').value, vix:document.getElementById('vix').value}); }
+// stress 省略时按当前滑块判定；归档重算时显式传入该日 regime
+function mapVIX(v, stress){ const st = (stress==null) ? isEquityStress() : stress; return st ? mapVIXStress(v) : mapVIXNormal(v); }
+const mapGSR      = ramp([[50,-0.7],[55,-0.3],[65,0],[75,0.4],[85,0.8],[100,0.8]]);
+const mapETF      = ramp([[-15,-0.8],[-5,-0.3],[0,0.1],[3,0.4],[8,0.8],[15,0.8]]);
 
 // ---------- 参数定义（经验权重已归一化，总计=1）----------
 const PILLARS = [
@@ -321,19 +495,19 @@ const PILLARS = [
   {key:'sov',  name:'支柱三 · 主权央行与避险需求',   w:0.35}
 ];
 const PARAMS = [
-  {id:'tips',   pillar:'bond', name:'10Y TIPS 实际利率', unit:'%',  min:-1, max:3,   step:0.05, def:1.80, w:0.17, fn:mapTIPS,   hint:'黄金最干净解释变量：实际利率↑→金价↓'},
-  {id:'ust10y', pillar:'bond', name:'10Y 名义国债收益率', unit:'%',  min:1,  max:6,   step:0.05, def:4.65, w:0.08, fn:mapUst10,  hint:'机会成本：收益率↑→金价↓'},
-  {id:'ust2y',  pillar:'bond', name:'2Y 国债收益率',     unit:'%',  min:1,  max:6,   step:0.05, def:4.00, w:0.05, fn:mapUst2,   hint:'政策预期定价'},
+  {id:'tips',   pillar:'bond', name:'10Y TIPS 实际利率', unit:'%',  min:-1, max:3,   step:0.05, def:1.80, w:0.21, fn:mapTIPS,   hint:'黄金最干净解释变量：实际利率↑→金价↓'},
+  {id:'ust10y', pillar:'bond', name:'10Y 名义国债收益率', unit:'%',  min:1,  max:6,   step:0.05, def:4.65, w:0.11, fn:mapUst10,  hint:'机会成本：收益率↑→金价↓'},
+  {id:'ust2y',  pillar:'bond', name:'2Y 国债收益率',     unit:'%',  min:1,  max:6,   step:0.05, def:4.00, w:0.06, fn:mapUst2,   hint:'政策预期定价'},
   {id:'ffr',    pillar:'bond', name:'联邦基金利率(美元政策利率)', unit:'%', min:1, max:6, step:0.05, def:4.50, w:0.06, fn:mapFFR, hint:'美元利率中枢：高→金价承压'},
   {id:'curve',  pillar:'bond', name:'收益率曲线斜率 2s10s', unit:'%', min:-1.5, max:2, step:0.05, def:0.50, w:0.02, fn:mapCurve, hint:'倒挂(负)→衰退避险→利多'},
-  {id:'dxy',    pillar:'usd',  name:'美元指数 DXY',      unit:'',   min:90, max:108, step:0.1, def:98.8, w:0.15, fn:mapDXY,    hint:'美元越强→金价越弱'},
-  {id:'twi',    pillar:'usd',  name:'美元贸易加权指数',   unit:'',   min:105,max:135, step:0.5, def:118,  w:0.07, fn:mapTWI,    hint:'广义美元强弱'},
-  {id:'ratediff',pillar:'usd', name:'美欧政策利率分化',   unit:'%',  min:-1, max:4,   step:0.1, def:2.0,  w:0.05, fn:mapRateDiff,hint:'美溢价越宽→美元强→利空'},
-  {id:'cb',     pillar:'sov',  name:'全球央行季净购金',   unit:'t',  min:-50,max:400, step:5,  def:289,  w:0.09, fn:mapCB,     hint:'结构性需求底：>300t 强多'},
-  {id:'gpr',    pillar:'sov',  name:'地缘风险指数 GPR',   unit:'',   min:0,  max:100, step:1,  def:55,   w:0.07, fn:mapGPR,    hint:'避险与信用对冲需求'},
-  {id:'fiscal', pillar:'sov',  name:'美元信用风险指数',   unit:'',   min:0,  max:100, step:1,  def:60,   w:0.06, fn:mapFiscal, hint:'财政/赤字风险越高→利多'},
-  {id:'vix',    pillar:'sov',  name:'避险情绪 VIX',      unit:'',   min:10, max:45,  step:1,  def:16,   w:0.05, fn:mapVIX,    hint:'恐慌升温→避险利多'},
-  {id:'etf',    pillar:'sov',  name:'GLD ETF 月度流量（$B）', unit:'', min:-15,max:15, step:1, def:3,   w:0.08, fn:mapETF,    hint:'纽约交易所大行财报披露的黄金 ETF 资金流：净流入→机构支撑利多'}
+  {id:'dxy',    pillar:'usd',  name:'美元指数 DXY',      unit:'',   min:90, max:108, step:0.1, def:98.8, w:0.19, fn:mapDXY,    hint:'美元越强→金价越弱'},
+  {id:'twi',    pillar:'usd',  name:'美元贸易加权指数',   unit:'',   min:105,max:135, step:0.5, def:118,  w:0.08, fn:mapTWI,    hint:'广义美元强弱'},
+  {id:'ratediff',pillar:'usd', name:'美欧政策利率分化',   unit:'%',  min:-1, max:4,   step:0.1, def:2.0,  w:0.06, fn:mapRateDiff,hint:'美溢价越宽→美元强→利空'},
+  {id:'cb',     pillar:'sov',  name:'全球央行季净购金',   unit:'t',  min:-50,max:400, step:5,  def:289,  w:0.05, fn:mapCB,     hint:'结构性需求底：>300t 强多（v0.5 降权，慢变量不主导日频择时）'},
+  {id:'gpr',    pillar:'sov',  name:'地缘风险指数 GPR',   unit:'',   min:0,  max:100, step:1,  def:55,   w:0.04, fn:mapGPR,    hint:'避险与信用对冲需求（v0.5 降权）'},
+  {id:'fiscal', pillar:'sov',  name:'美元信用风险指数',   unit:'',   min:0,  max:100, step:1,  def:60,   w:0.03, fn:mapFiscal, hint:'财政/赤字风险越高→利多（v0.5 降权）'},
+  {id:'vix',    pillar:'sov',  name:'避险情绪 VIX',      unit:'',   min:10, max:45,  step:1,  def:16,   w:0.06, fn:mapVIX,    hint:'恐慌→利多；权益外溢状态下恐慌→利空（v0.5 状态化）'},
+  {id:'etf',    pillar:'sov',  name:'GLD ETF 月度流量（$B）', unit:'', min:-15,max:15, step:1, def:3,   w:0.03, fn:mapETF,    hint:'纽约交易所大行财报披露的黄金 ETF 资金流：净流入→利多（v0.5 降权）'}
 ];
 
 const THRESH = 0.33;
@@ -525,6 +699,10 @@ function compute(){
   } else {
     hint += ' 多空均衡、信号不清晰，建议观望或极小仓试错，等待任一支柱出现明确突破。';
   }
+  // v0.5 regime 提示：权益外溢状态下高 VIX 已按"利空金"计分，避免误读
+  if(isEquityStress()){
+    hint += ' <b style="color:var(--bear)">⚠ 当前处于「权益外溢」状态</b>（10Y≥5% 且 DXY≥103，或 VIX≥30）：黄金呈风险资产特征，恐慌升温不再自动利多，VIX 已按流动性挤兑口径反向计分。';
+  }
   document.getElementById('entryHint').innerHTML = hint;
 
   // 记录当前计算结果（供日历追踪捕获）
@@ -590,8 +768,11 @@ function compute(){
 }
 
 // ---------- 事件绑定 ----------
+// 用户是否手动改过参数：为 true 时自动刷新只更新展示层，不覆盖手调输入值
+let USER_ADJUSTED = false;
 // 任一参数被手动调整时，参数明细区的「获取时间」应明确转为「已手动调整」，避免误导客户
 function markAdjusted(){
+  USER_ADJUSTED = true;
   const box=document.getElementById('paramUpdateTime');
   const ptVal=document.getElementById('ptVal');
   const ptSrc=document.getElementById('ptSrc');
@@ -605,17 +786,60 @@ VALID.forEach(id=> document.getElementById(id).addEventListener('input', ()=>{ m
 
 // 时钟（每秒走动）
 document.getElementById('clock').textContent = nowStr();
-setInterval(()=>{ document.getElementById('clock').textContent = nowStr(); }, 1000);
+// 自动刷新档位（秒）：0=关闭 / 30s / 10min / 1h / 6h；默认 10min，选择持久化到 localStorage
+const REFRESH_LS = 'gold_refresh_interval_v1';
+let autoTimer = null, autoIntervalSec = 600, refreshDeadline = 0, lastRefreshStr = '—';
+function fmtLeft(sec){
+  if(sec < 60) return sec + '秒';
+  if(sec < 3600) return Math.floor(sec/60) + '分' + (sec%60 ? (sec%60)+'秒' : '');
+  return Math.floor(sec/3600) + '时' + (Math.floor(sec%3600/60) ? Math.floor(sec%3600/60)+'分' : '');
+}
+function refreshInfoTick(){
+  const el = document.getElementById('refreshInfo'); if(!el) return;
+  if(!autoTimer){ el.textContent = '已关闭'; return; }
+  const left = Math.max(0, Math.ceil((refreshDeadline - Date.now())/1000));
+  el.textContent = '下次 ' + fmtLeft(left) + ' · 上次 ' + lastRefreshStr;
+}
+setInterval(()=>{ document.getElementById('clock').textContent = nowStr(); refreshInfoTick(); }, 1000);
 
-// 手动刷新：强制重算并更新时间戳
-document.getElementById('refresh').addEventListener('click', ()=>{ compute(); renderGoldChart(); });
+// 手动刷新：重新拉取快照并重算（保留用户手调值）
+document.getElementById('refresh').addEventListener('click', ()=>{ doRefresh(); });
 
-// 自动刷新（30s 心跳）：重算模型并更新时间戳（无实时数据源时仅刷新评估时间）
-let autoTimer = null;
-document.getElementById('autoRefresh').addEventListener('change', function(){
-  if(this.checked && !autoTimer){ autoTimer = setInterval(compute, 30000); }
-  else if(!this.checked && autoTimer){ clearInterval(autoTimer); autoTimer = null; }
-});
+// 自动刷新：按所选间隔真正重新拉取 snapshot / 归档 / 金价，再重算与重绘。
+// 若用户手动调整过参数（USER_ADJUSTED），则只用最新快照更新展示层，不覆盖手调输入值。
+async function doRefresh(){
+  try{
+    const snap = await apiFirst(['/api/snapshot', 'data/snapshot.json']);
+    if(snap){
+      if(!USER_ADJUSTED){ applySnapshot(snap); compute(); }
+      else renderTrendCard(snap);   // 手调时仅更新趋势卡等只读展示
+    }
+    await loadGoldPrice();
+    loadArchives();                 // 归档/日历按最新数据刷新（API 优先）
+    renderGoldChart();              // 单例 echarts 实例 setOption，重复调用安全
+    lastRefreshStr = nowStr().slice(11);
+  }catch(e){ /* 拉取失败：保留上次有效数据，不写空值 */ }
+  refreshDeadline = Date.now() + autoIntervalSec*1000;
+  refreshInfoTick();
+}
+function applyRefreshInterval(sec, persist){
+  if(autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+  autoIntervalSec = sec;
+  if(persist){ try{ localStorage.setItem(REFRESH_LS, String(sec)); }catch(e){} }
+  if(sec > 0){
+    refreshDeadline = Date.now() + sec*1000;
+    autoTimer = setInterval(doRefresh, sec*1000);
+  }
+  refreshInfoTick();
+}
+(function initRefreshInterval(){
+  const sel = document.getElementById('refreshInterval'); if(!sel) return;
+  let saved = null; try{ saved = parseInt(localStorage.getItem(REFRESH_LS), 10); }catch(e){}
+  if(saved != null && [0,30,600,3600,21600].includes(saved)) sel.value = String(saved);
+  autoIntervalSec = parseInt(sel.value, 10) || 0;
+  sel.addEventListener('change', ()=>{ applyRefreshInterval(parseInt(sel.value,10)||0, true); });
+  applyRefreshInterval(autoIntervalSec, false);   // 默认 10 分钟即启动
+})();
 
 document.getElementById('reset').addEventListener('click', function(){
   PARAMS.forEach(p=> document.getElementById(p.id).value = p.def);
@@ -654,13 +878,25 @@ function renderCalendar(){
     const isToday=(isCur && d===t.getDate());
     const rec=calState.log[key];
     const arc=(!isToday)?(calState.archived[key]||null):null;   // 历史日优先归档；今日保留实时
-    const show=arc||rec;                                        // 显示数据源
+    // 历史日按当前模型从该日 params 重算显示分，与趋势图/明细表同口径；
+    // 不再直接读 index.json 里冻结的 summary.comp（模型/映射微调后日历会长期不变）。
+    let show=rec;
+    if(arc){
+      const rp=recalcArchivedPoint(arc);
+      show=Object.assign({},arc,{
+        comp: rp.comp!=null? rp.comp : arc.comp,
+        band: rp.band||arc.band,
+        color: rp.color||arc.color,
+        act: rp.short||arc.act||'',
+        goldPriceClose: rp.goldPriceClose!=null? rp.goldPriceClose : arc.goldPriceClose
+      });
+    }
     const tmark=isToday?'<span class="dtoday">今</span>':'';
     const arcMark=arc?'<span class="darc">📁</span>':'';
     if(show){
       const col=show.color||'#5aa9ff';
-      const gp = show.goldPrice!=null ? show.goldPrice : (isToday ? window.__goldPrice : null);
-      const goldLine = gp!=null ? '<div class="dgold">金价 '+Math.round(gp)+'</div>' : '';
+      const gp = show.goldPriceClose!=null ? show.goldPriceClose : (show.goldPrice!=null ? show.goldPrice : (isToday ? window.__goldPrice : null));
+      const goldLine = gp!=null ? '<div class="dgold">金价 '+Math.round(gp)+(show.goldPriceClose!=null?'':'*')+'</div>' : '';
       html+='<div class="cal-cell has" data-key="'+key+'" style="border-color:'+col+';background:'+hexA(col,0.20)+'">'
         + arcMark + tmark
         + '<div class="dnum" style="color:'+col+'">'+d+'</div>'
@@ -676,6 +912,38 @@ function renderCalendar(){
   document.querySelectorAll('#calGrid .cal-cell.has').forEach(el=>{
     el.addEventListener('click', ()=> loadDayParams(el.getAttribute('data-key')));
   });
+  renderGoldSide();
+}
+// 右侧「每日金价」清单：复用日历数据源，按日期倒序列出，点击联动详情
+function renderGoldSide(){
+  const list=document.getElementById('calGoldList'); if(!list) return;
+  const rows=[];
+  Object.keys(calState.archived||{}).forEach(k=>{
+    const a=calState.archived[k];
+    const gp=a.goldPriceClose!=null? a.goldPriceClose : a.goldPrice;
+    if(gp!=null && k!==dstr(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()))
+      rows.push({date:k, price:Math.round(gp), aligned:a.goldPriceClose!=null, color:a.color||'#e0b13e'});
+  });
+  // 今日实时金价置顶
+  if(window.__goldPrice!=null){
+    const t=new Date();
+    rows.push({date:dstr(t.getFullYear(),t.getMonth(),t.getDate()), price:Math.round(window.__goldPrice), aligned:false, color:'#e0b13e', today:true});
+  }
+  rows.sort((a,b)=> a.date<b.date?1:a.date>b.date?-1:0);
+  const cnt=document.getElementById('goldSideCount');
+  if(cnt) cnt.textContent=rows.length+' 日';
+  if(!rows.length){ list.innerHTML='<div class="gs-empty">暂无金价数据</div>'; return; }
+  list.innerHTML=rows.map(r=>{
+    const md=r.date.slice(5);
+    const mark=r.today?'今':(r.aligned?'':'*');
+    return '<div class="cal-goldrow" data-key="'+r.date+'" style="border-left-color:'+r.color+'" title="'+r.date+(r.today?' 实时':(r.aligned?' 收盘真值':' 休市沿用T-1'))+'">'
+      + '<span class="gr-date">'+md+'</span>'
+      + '<span><span class="gr-price">'+r.price+'</span>'+(mark?'<span class="gr-mark">'+mark+'</span>':'')+'</span>'
+      + '</div>';
+  }).join('');
+  list.querySelectorAll('.cal-goldrow').forEach(el=>{
+    el.addEventListener('click', ()=> loadDayParams(el.getAttribute('data-key')));
+  });
 }
 // 颜色图例：把「窗口阈值与操作参考」映射到日期框配色，让颜色含义一目了然
 function buildCalLegend(){
@@ -686,37 +954,106 @@ function buildCalLegend(){
 // 纯函数复用 PARAMS 映射逻辑计算任意一日 params 的综合分/档位（不污染全局滑块）
 function evalParams(pp){
   let n=0,d=0;
-  PARAMS.forEach(p=>{ const v=(pp&&pp[p.id]!=null)? pp[p.id] : p.def; const s=p.fn(v); n+=s*p.w; d+=p.w; });
+  const st = stressOf(pp);
+  PARAMS.forEach(p=>{ const v=(pp&&pp[p.id]!=null)? pp[p.id] : p.def; const s=(p.id==='vix')? mapVIX(v,st) : p.fn(v); n+=s*p.w; d+=p.w; });
   const comp = d? n/d : 0;
-  return { comp, band: bandOf(comp) };
+  return { comp, band: bandOf(comp), regime: st?'equityStress':'normal' };
 }
 let trendChart=null;
+// v0.6 新口径重算：归档 comp 为当日快照旧口径，展示层统一按当前模型（含 VIX 状态化）重算，
+// 与今日实时点同口径，消除曲线末端断层。归档原始 comp 不被改写（历史真值保留）。
+function recalcArchivedPoint(a){
+  const params=(a&&a.params) || null;
+  if(params && Object.keys(params).length){
+    const ev=evalParams(params);
+    return {
+      comp:+ev.comp.toFixed(3), score100:+c100(ev.comp).toFixed(1), band:ev.band.name,
+      color:ev.band.color, short:ev.band.short, regime:ev.regime,
+      goldPriceClose:(a.goldPriceClose!=null?a.goldPriceClose:(a.goldPrice!=null?a.goldPrice:null)),
+      oldComp:(a.comp!=null?+a.comp:null),
+      score100Old:(a.comp!=null?+c100(a.comp).toFixed(1):null), source:'v06'
+    };
+  }
+  return {
+    comp:(a&&a.comp!=null)?+a.comp:null, score100:(a&&a.comp!=null)?+c100(a.comp).toFixed(1):null,
+    band:(a&&a.band)||'—', color:(a&&a.color)||'#93a1b0', short:(a&&a.short)||'',
+    regime:'—', goldPriceClose:(a&&a.goldPriceClose!=null?a.goldPriceClose:(a&&a.goldPrice!=null?a.goldPrice:null)),
+    oldComp:(a&&a.comp!=null?+a.comp:null),
+    score100Old:(a&&a.comp!=null?+c100(a.comp).toFixed(1):null), source:'archive'
+  };
+}
+// 生成近 N 日统一口径的趋势点（renderTrend 与明细表共用同一数据源）
+function buildTrendPoints(n){
+  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
+  const map={};
+  Object.keys(calState.archived).forEach(k=>{ map[k]=recalcArchivedPoint(calState.archived[k]); });
+  // 今日实时（若归档未覆盖今日）：LAST.comp 已是 v0.6 新口径
+  if(LAST && LAST.comp!=null && !calState.archived[todayKey]){
+    map[todayKey]={
+      comp:+LAST.comp.toFixed(3), score100:+c100(LAST.comp).toFixed(1),
+      band:LAST.band.name, color:LAST.band.color, short:LAST.band.short,
+      regime:LAST.regime||stressOf(LAST.params||{}), oldComp:null, score100Old:null, source:'live'
+    };
+  }
+  return Object.keys(map).sort((a,b)=> a<b?-1:1).map(k=>Object.assign({date:k},map[k])).slice(-(n||30));
+}
+// 新版核算明细表：与趋势图共用 buildTrendPoints，逐日列出新口径分/档位/状态/金价/旧口径对照
+function renderTrendTable(recent){
+  const body=document.getElementById('trendTableBody');
+  if(!body) return;
+  if(!recent || !recent.length){ body.innerHTML='<tr><td colspan="7">暂无历史归档</td></tr>'; return; }
+  const rows=recent.slice().reverse().map(p=>{
+    const diff=(p.oldComp!=null && p.score100Old!=null && Math.abs(p.score100-p.score100Old)>=0.05)
+      ? +(p.score100-p.score100Old).toFixed(1) : null;
+    const diffCls=diff==null?'flat':(diff<0?'down':(diff>0?'up':'flat'));
+    const diffTxt=diff==null? '—' : ((diff>0?'+':'')+diff.toFixed(1));
+    const state=(p.regime==='equityStress')?'<span class="tt-stress">权益外溢</span>':(p.regime==='normal'?'常态':'—');
+    const gold=(p.goldPriceClose!=null && p.goldPriceClose!=='')?('$'+p.goldPriceClose):'—';
+    return '<tr>'
+      +'<td>'+p.date+'</td>'
+      +'<td class="tt-score" style="color:'+p.color+'">'+p.score100.toFixed(1)+'</td>'
+      +'<td style="color:'+p.color+'">'+p.band+'</td>'
+      +'<td class="tt-stress-wrap">'+state+'</td>'
+      +'<td>'+gold+'</td>'
+      +'<td class="tt-old">'+(p.score100Old!=null?p.score100Old.toFixed(1):'—')+'</td>'
+      +'<td class="tt-diff '+diffCls+'">'+diffTxt+'</td>'
+      +'</tr>';
+  }).join('');
+  body.innerHTML=rows;
+  const note=document.getElementById('trendTableNote');
+  if(note){
+    const n=recent.filter(p=>p.source==='v06'||p.source==='live').length;
+    const dn=recent.filter(p=>p.oldComp!=null && Math.abs(p.score100-p.score100Old)>=0.05).length;
+    note.textContent='按当前模型对每日归档参数统一重算（含 VIX 状态化）：'+n+'/'+recent.length+' 日为新口径；'
+      +dn+' 日与旧口径快照存在差异（差值列）。旧口径为归档当日快照值，仅作对照，不改写历史数据。';
+  }
+}
 function renderTrend(){
   if(!trendChart) trendChart = echarts.init(document.getElementById('trendChart'));
-  const t=new Date(); const todayKey=dstr(t.getFullYear(),t.getMonth(),t.getDate());
-  const pts=[];
-  Object.keys(calState.archived).forEach(k=>{ const a=calState.archived[k]; pts.push({date:k,comp:a.comp,color:a.color,band:a.band}); });
-  // 今日实时（若归档未覆盖今日）
-  if(LAST && LAST.comp!=null && !calState.archived[todayKey]){
-    pts.push({date:todayKey, comp:+LAST.comp.toFixed(3), color:LAST.band.color, band:LAST.band.name});
-  }
-  pts.sort((a,b)=> a.date<b.date?-1:1);
-  const recent = pts.slice(-30);
+  const recent=buildTrendPoints(30);
   const note=document.getElementById('trendNote');
-  if(note) note.textContent = recent.length? '共 '+recent.length+' 个交易日（归档+今日实时），按日升序' : '暂无历史归档（每日自动化将逐日累积）';
+  const v06cnt=recent.filter(p=>p.source==='v06'||p.source==='live').length;
+  if(note) note.textContent = recent.length? '近 '+recent.length+' 个交易日 · v0.6 新口径重算 '+v06cnt+'/'+recent.length+' 日（含 VIX 状态化）' : '暂无历史归档（每日自动化将逐日累积）';
   trendChart.setOption({
     grid:{left:38,right:20,top:16,bottom:26},
-    tooltip:{trigger:'axis', formatter:p=> p[0].axisValue+' ：'+p[0].data.toFixed(1)+' 分'},
+    tooltip:{trigger:'axis', formatter:ps=>{
+      const p=recent[ps[0].dataIndex]; if(!p) return '';
+      const diff=(p.oldComp!=null && Math.abs(p.comp-p.oldComp)>0.0005)
+        ? '<br/>旧口径 '+p.score100Old+' 分 → 新口径 '+p.score100+' 分' : '';
+      return p.date+'<br/><b style="color:'+p.color+'">'+p.band+' '+p.score100+' 分</b>'
+        +'<br/>regime：'+(p.regime==='equityStress'?'权益外溢':(p.regime==='normal'?'常态':'—'))+diff;
+    }},
     xAxis:{type:'category', data:recent.map(p=>p.date.slice(5)), axisLabel:{color:'#93a1b0',fontSize:10}, axisLine:{lineStyle:{color:'#2a3848'}}},
     yAxis:{type:'value', min:0, max:100, axisLabel:{color:'#93a1b0',fontSize:10,formatter:v=>v.toFixed(0)}, splitLine:{lineStyle:{color:'#2a3848'}}, axisLine:{lineStyle:{color:'#2a3848'}}},
     series:[{
-      type:'line', smooth:true, data:recent.map(p=>+c100(p.comp).toFixed(1)),
+      type:'line', smooth:true, data:recent.map(p=>+p.score100.toFixed(1)),
       lineStyle:{width:2,color:'#e6b855'}, itemStyle:{color:'#e6b855'},
       areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(230,184,85,.28)'},{offset:1,color:'rgba(230,184,85,0)'}]}},
       markLine:{silent:true,symbol:'none',data:[{yAxis:50}],lineStyle:{color:'#5aa9ff',type:'dashed'},label:{color:'#9ccbff',formatter:'中性 50'}},
-      markPoint:{symbol:'circle',symbolSize:8,data:recent.map((p,i)=>({coord:[i,+c100(p.comp).toFixed(1)],itemStyle:{color:p.color}}))}
+      markPoint:{symbol:'circle',symbolSize:8,data:recent.map((p,i)=>({coord:[i,+p.score100.toFixed(1)],itemStyle:{color:p.color}}))}
     }]
   });
+  renderTrendTable(recent);
 }
 // 数据读取层：API 优先（独立后端），失败自动回退静态 JSON（云端静态版照常可用）
 async function apiFirst(urls){
@@ -734,8 +1071,10 @@ function renderGoldChart(){
   if(!goldChart) goldChart = echarts.init(document.getElementById('goldChart'));
   const note=document.getElementById('goldNote');
   apiFirst(['/api/gold-kline', 'data/gold_kline.json']).then(j=>{
-    if(!j || !j.nodes || !j.nodes.length){ if(note) note.textContent='暂无黄金价格数据'; return; }
-    const nodes=j.nodes.slice().sort((a,b)=> a.date<b.date?-1:1);   // 按日期升序
+    // 兼容两种结构：API 返回 {nodes:[...]}，静态兜底 JSON 为 {data:{nodes:[...]}}
+    const raw=(j && (j.data ? j.data.nodes : j.nodes)) || [];
+    if(!raw.length){ if(note) note.textContent='暂无黄金价格数据'; return; }
+    const nodes=raw.slice().sort((a,b)=> a.date<b.date?-1:1);   // 按日期升序
     const dates=nodes.map(n=>n.date.slice(5));
     const closes=nodes.map(n=>+n.last);
     const n=closes.length;
@@ -759,6 +1098,262 @@ function renderGoldChart(){
     });
   }).catch(e=>{ if(note) note.textContent='黄金价格加载失败'; });
 }
+// 历史泡沫周期对照：月均价路径 + 归一化叠加（只读参考层，口径在数据文件，不进主分）
+let cycleCharts={}, cycleMetaText='';
+function monthIdx(s){ const a=String(s).split('-'); return (+a[0])*12 + (+a[1]-1); }
+function monthsBetween(a,b){ return monthIdx(b)-monthIdx(a); }
+function pctChange(a,b){ return a? ((b/a)-1)*100 : 0; }
+function aggregateKlineMonths(nodes){
+  const by={};
+  (nodes||[]).forEach(n=>{
+    const m=String(n.date||'').slice(0,7), v=+n.last;
+    if(!/^\d{4}-\d{2}$/.test(m) || !isFinite(v)) return;
+    (by[m]=by[m]||[]).push(v);
+  });
+  return Object.keys(by).sort().map(m=>({m, avg:+(by[m].reduce((a,b)=>a+b,0)/by[m].length).toFixed(2), count:by[m].length}));
+}
+function cycleChart(id){
+  if(!cycleCharts[id]) cycleCharts[id]=echarts.init(document.getElementById(id));
+  return cycleCharts[id];
+}
+const CYCLE_EVENT_SHORT={
+  '2000-02':'金价高','2000-03':'纳指顶','2001-01':'降息','2001-04':'金价低','2002-05':'收复高',
+  '2007-10':'股顶','2008-03':'金价高','2008-09':'雷曼','2008-11':'金价低','2008-12':'零利率','2009-03':'QE','2009-09':'收复高','2011-09':'周期高'
+};
+function renderCyclePanel(c){
+  const dates=c.series.map(x=>x[0]), prices=c.series.map(x=>x[1]);
+  const peak=c.series.find(x=>x[0]===c.goldPeak), trough=c.series.find(x=>x[0]===c.goldTrough);
+  const rec=c.series.find(x=>x[0]===c.recoveryMonth), end=c.series.find(x=>x[0]===c.endMonth);
+  const m1=monthsBetween(c.goldPeak,c.goldTrough), m2=monthsBetween(c.goldTrough,c.recoveryMonth);
+  const dd=pctChange(peak[1],trough[1]), rebound=pctChange(trough[1],rec[1]), total=pctChange(peak[1],end[1]);
+  const sub=document.getElementById(c.key==='dotcom'?'dotcomSub':'gfcSub');
+  if(sub) sub.textContent='股顶 '+c.equityTop+' → 金价低点 '+c.goldTrough+'（'+m1+' 个月）｜ '+c.policyPivotLabel+' ｜ 收复前高 '+c.recoveryMonth+'（'+m2+' 个月）';
+  const stats=document.getElementById(c.key==='dotcom'?'dotcomStats':'gfcStats');
+  if(stats){
+    stats.innerHTML=[
+      {k:'高点 → 谷底',v:dd.toFixed(1)+'% · '+m1+'个月',c:'var(--bear)'},
+      {k:'谷底 → 收复前高',v:'+'+rebound.toFixed(1)+'% · '+m2+'个月',c:'var(--bull)'},
+      {k:'高点 → 周期末',v:(total>=0?'+':'')+total.toFixed(1)+'%',c:total>=0?'var(--bull)':'var(--bear)'}
+    ].map(x=>'<div class="cp-stat"><div class="k">'+x.k+'</div><div class="v" style="color:'+x.c+'">'+x.v+'</div></div>').join('');
+  }
+  cycleChart(c.key==='dotcom'?'dotcomChart':'gfcChart').setOption({
+    animation:false,
+    grid:{left:46,right:14,top:14,bottom:30},
+    tooltip:{trigger:'axis',axisPointer:{type:'cross'},backgroundColor:'#161f2b',borderColor:'#2a3848',
+      textStyle:{color:'#e6edf3',fontSize:11},
+      formatter:ps=>{
+        const i=ps[0].dataIndex, m=dates[i];
+        const ev=c.events.filter(e=>e.date===m).map(e=>'<br/><b>'+e.label+'</b>：'+e.note).join('');
+        return m+'<br/>月均价：<b>$'+prices[i]+'</b>'+ev;
+      }},
+    xAxis:{type:'category',data:dates,boundaryGap:false,axisLabel:{color:'#93a1b0',fontSize:9,interval:Math.max(1,Math.floor(dates.length/7))},axisLine:{lineStyle:{color:'#2a3848'}}},
+    yAxis:{type:'value',scale:true,axisLabel:{color:'#93a1b0',fontSize:9,formatter:v=>'$'+v},splitLine:{lineStyle:{color:'#2a3848'}},axisLine:{lineStyle:{color:'#2a3848'}}},
+    dataZoom:[{type:'inside'}],
+    series:[{
+      type:'line',data:prices,smooth:true,showSymbol:false,
+      lineStyle:{width:2,color:c.color},itemStyle:{color:c.color},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:c.key==='dotcom'?'rgba(224,177,62,.24)':'rgba(90,169,255,.24)'},{offset:1,color:'rgba(0,0,0,0)'}]}},
+      markArea:{silent:true,data:c.phases.map(p=>[{xAxis:p.from,itemStyle:{color:p.color},label:{show:true,formatter:p.label.split(' · ')[0],color:'#93a1b0',fontSize:9,position:'insideTop'}},{xAxis:p.to}])},
+      markLine:{silent:true,symbol:'none',data:c.events.filter(e=>CYCLE_EVENT_SHORT[e.date]).map(e=>({
+        xAxis:e.date,label:{formatter:CYCLE_EVENT_SHORT[e.date],color:'#c8d3dd',fontSize:9,position:'insideEndTop'},
+        lineStyle:{color:'rgba(200,211,221,.34)',type:'dashed',width:1}
+      }))}
+    }]
+  },true);
+}
+// 经济周期均值 + 康波长波拟合：两轮历史归一化路径逐月等权均值 + 长波漂移，锚定最新月均价外推 30 个月（虚线，仅参考）
+const CYCLE_FIT_HORIZON=30, KWAVE_DRIFT=0.003;
+function addMonths(m,n){
+  const a=String(m).split('-'), d=new Date(+a[0],(+a[1]-1)+n,1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+}
+function buildCycleFitAverage(cycles,months,anchor,anchorMonth){
+  if(!anchor || !months.length || !cycles.length) return null;
+  // 1) 各历史周期按「距金价阶段高点月数」对齐，归一化为高点=100
+  const maps=cycles.map(c=>{
+    const M=new Map(), base=(c.series.find(x=>x[0]===c.goldPeak)||[])[1];
+    if(!base) return M;
+    c.series.forEach(x=>{ const t=monthsBetween(c.goldPeak,x[0]); if(t>=0) M.set(t,x[1]/base*100); });
+    return M;
+  });
+  const maxT=Math.max(...maps.map(m=>m.size?Math.max(...m.keys()):0));
+  const tpl=[];
+  for(let t=0;t<=maxT;t++){
+    const vals=maps.map(m=>m.get(t)).filter(v=>v!=null);
+    if(vals.length) tpl.push([t,vals.reduce((a,b)=>a+b,0)/vals.length]);
+  }
+  if(tpl.length<2) return null;
+  const at=t=>{
+    if(t<=tpl[0][0]) return tpl[0][1];
+    if(t>=tpl[tpl.length-1][0]) return tpl[tpl.length-1][1];
+    for(let i=1;i<tpl.length;i++) if(tpl[i][0]>=t){
+      const a=tpl[i-1], b=tpl[i]; return a[1]+(b[1]-a[1])*(t-a[0])/(b[0]-a[0]);
+    }
+    return tpl[tpl.length-1][1];
+  };
+  // 2) 锚定最新月均价：拟合线穿过当前点，再叠加康波长波漂移向前外推
+  const last=months[months.length-1];
+  const t0=monthsBetween(anchorMonth,last.m), curNorm=last.avg/anchor.avg*100;
+  const tpl0=at(t0);
+  if(!isFinite(tpl0)||tpl0<=0) return null;
+  const scale=curNorm/tpl0, data=[];
+  for(let t=t0;t<=t0+CYCLE_FIT_HORIZON;t++){
+    const v=at(t)*scale*Math.pow(1+KWAVE_DRIFT,t-t0);
+    data.push({value:[t,+v.toFixed(1)],actual:+(anchor.avg*v/100).toFixed(0),month:addMonths(last.m,t-t0)});
+  }
+  // 3) 单周期终点（用于展示均值路径的离散区间）
+  const ends=maps.map((m,i)=>{
+    const tEnd=t0+CYCLE_FIT_HORIZON;
+    const ownAt=t=>{
+      if(!m.size) return null;
+      const ks=[...m.keys()].sort((a,b)=>a-b);
+      if(t<=ks[0]) return m.get(ks[0]);
+      if(t>=ks[ks.length-1]) return m.get(ks[ks.length-1]);
+      for(let j=1;j<ks.length;j++) if(ks[j]>=t){
+        const a=ks[j-1], b=ks[j]; return m.get(a)+(m.get(b)-m.get(a))*(t-a)/(b-a);
+      }
+      return null;
+    };
+    const base=ownAt(t0);
+    if(base==null) return null;
+    const v=ownAt(tEnd)/base*curNorm*Math.pow(1+KWAVE_DRIFT,CYCLE_FIT_HORIZON);
+    return {name:cycles[i].short,color:cycles[i].color,norm:+v.toFixed(1),actual:+(anchor.avg*v/100).toFixed(0)};
+  }).filter(Boolean);
+  return {name:'平均拟合 · 30个月',color:'#c792ea',data,t0,curNorm:+curNorm.toFixed(1),end:data[data.length-1],ends};
+}
+function renderCycleOverlay(cycles,nodes){
+  const months=aggregateKlineMonths(nodes).filter(x=>x.m>='2026-01');
+  const peakNode=(nodes||[]).slice().sort((a,b)=>String(a.date)<String(b.date)?-1:1)
+    .reduce((b,n)=>(+n.last>+b.last?n:b), nodes[0]||null);
+  const anchorMonth=peakNode? String(peakNode.date||'').slice(0,7) : null;
+  const anchor=anchorMonth? months.find(x=>x.m===anchorMonth) : null;
+  // 统一横轴口径：距阶段高点日的真实月数（按真实天数/30.4375），保证红色「最新」与绿色「实际」末端落在同一交易日、同一条垂直标线上
+  const DAYS_PER_MONTH=30.4375;
+  const peakTime=peakNode? new Date(String(peakNode.date).replace(/-/g,'/')).getTime() : null;
+  function sincePeak(dateStr){
+    if(peakTime==null) return 0;
+    const t=new Date(String(dateStr).replace(/-/g,'/')).getTime();
+    return +((t-peakTime)/86400000/DAYS_PER_MONTH).toFixed(2);
+  }
+  const monthLastDate={};
+  (nodes||[]).forEach(n=>{
+    const m=String(n.date||'').slice(0,7), d=String(n.date||'');
+    if(!monthLastDate[m] || d>monthLastDate[m]) monthLastDate[m]=d;
+  });
+  const series=cycles.map(c=>{
+    const base=c.series.find(x=>x[0]===c.goldPeak)[1];
+    return {
+      name:c.short, color:c.color,
+      data:c.series.filter(x=>monthIdx(x[0])>=monthIdx(c.goldPeak)).map(x=>({
+        value:[monthsBetween(c.goldPeak,x[0]), +(x[1]/base*100).toFixed(1)],
+        actual:x[1]
+      }))
+    };
+  });
+  const last=months.length? months[months.length-1] : null;
+  if(anchor){
+    series.push({
+      name:'当前 2026 周期', color:'#e0533a',
+      data:months.filter(x=>monthIdx(x.m)>=monthIdx(anchor.m)).map(x=>({
+        value:[sincePeak(monthLastDate[x.m]||x.m+'-28'), +(x.avg/anchor.avg*100).toFixed(1)],
+        actual:x.avg
+      }))
+    });
+    const note=document.getElementById('cycleOverlayNote');
+    if(note) note.textContent='当前锚点：'+anchor.m+' 月均价 $'+anchor.avg+'（月内 '+anchor.count+' 日；日线峰值 $'+(+peakNode.last).toFixed(2)+' 于 '+peakNode.date+'）｜最新 '+last.m+' 月均价 $'+last.avg+'（月内 '+last.count+' 日，未收盘月）';
+  }
+  const lastCur=series.length>cycles.length? series[series.length-1].data.slice(-1)[0] : null;
+  const fit=buildCycleFitAverage(cycles,months,anchor,anchorMonth);
+  // 当前实际金价（真实日线收盘）绿色曲线：以阶段高点当日收盘归一=100，横轴=距高点月数（按真实天数折算，含小数）
+  let realSeries=null;
+  if(peakNode && +peakNode.last>0){
+    const pd=String(peakNode.date), base=+peakNode.last;
+    const pts=(nodes||[]).filter(n=>String(n.date)>=pd && isFinite(+n.last) && +n.last>0)
+      .sort((a,b)=>String(a.date)<String(b.date)?-1:1)
+      .map(n=>({value:[sincePeak(String(n.date)), +(+n.last/base*100).toFixed(1)], actual:+n.last, date:String(n.date)}));
+    if(pts.length>=2) realSeries={name:'实际金价(日线)',color:'#2ecc71',data:pts,base};
+    if(realSeries){
+      const gnote=document.getElementById('cycleOverlayNote');
+      if(gnote) gnote.textContent += ' ｜ 绿色曲线＝当前实际金价（日线真实收盘，阶段高点 $'+base.toFixed(2)+' 归一=100）｜「最新/实际」两点已对齐至最新交易日同一时点';
+    }
+  }
+  // 末端对齐：以最新交易日为权威时点，「最新」(月均价) 与「实际」(日线收盘) 两标注共用同一横坐标 endX
+  const realLastPoint=realSeries&&realSeries.data.length? realSeries.data[realSeries.data.length-1] : null;
+  const endX=realLastPoint? realLastPoint.value[0] : (lastCur? lastCur.value[0] : null);
+  const alignLine=endX!=null? {xAxis:endX,label:{formatter:'最新 / 实际 · 同一时点',color:'#2ecc71',fontSize:9,position:'insideEndTop',rotate:0},lineStyle:{color:'rgba(46,204,113,.5)',type:'dashed',width:1}} : null;
+  const realMaxT=realSeries&&realSeries.data.length? realSeries.data[realSeries.data.length-1].value[0]+2 : 0;
+  const xMax=Math.max(60,fit?fit.end.value[0]+2:60,realMaxT), yMax=Math.max(190,fit?Math.ceil(fit.end.value[1]/10)*10+10:190);
+  cycleChart('cycleOverlay').setOption({
+    animation:false,
+    grid:{left:46,right:18,top:30,bottom:34},
+    legend:{top:2,data:series.map(s=>s.name).concat(fit?[fit.name]:[]).concat(realSeries?[realSeries.name]:[]),textStyle:{color:'#93a1b0',fontSize:10},itemWidth:14,itemHeight:8},
+    tooltip:{trigger:'axis',backgroundColor:'#161f2b',borderColor:'#2a3848',textStyle:{color:'#e6edf3',fontSize:11},
+      formatter:ps=>{
+        const t=ps.length? ps[0].axisValue : '';
+        return '距阶段高点 '+t+' 个月<br/>'+ps.map(p=>{
+          const extra=p.data&&p.data.month? ' · '+p.data.month+'（拟合）' : (p.data&&p.data.date? ' · '+p.data.date+'（日线）' : '');
+          return p.marker+p.seriesName+'：<b>'+p.value[1].toFixed(1)+'</b>（$'+p.data.actual+extra+'）';
+        }).join('<br/>');
+      }},
+    xAxis:{type:'value',min:0,max:xMax,name:'月',nameTextStyle:{color:'#93a1b0',fontSize:9},axisLabel:{color:'#93a1b0',fontSize:9},splitLine:{lineStyle:{color:'#2a3848'}},axisLine:{lineStyle:{color:'#2a3848'}}},
+    yAxis:{type:'value',min:70,max:yMax,name:'指数',nameTextStyle:{color:'#93a1b0',fontSize:9},axisLabel:{color:'#93a1b0',fontSize:9,formatter:v=>v.toFixed(0)},splitLine:{lineStyle:{color:'#2a3848'}},axisLine:{lineStyle:{color:'#2a3848'}}},
+    series:[{
+      name:'基准',type:'line',data:[],silent:true,
+      markLine:{silent:true,symbol:'none',data:[{yAxis:100,label:{formatter:'阶段高点 = 100',color:'#e0b13e',fontSize:9,position:'insideEndTop'},lineStyle:{color:'rgba(224,177,62,.42)',type:'dashed',width:1}}].concat(alignLine?[alignLine]:[])}
+    }].concat(series.map((s,i)=>({
+      name:s.name,type:'line',data:s.data,smooth:true,showSymbol:false,
+      lineStyle:{width:s.name==='当前 2026 周期'?2.6:1.8,color:s.color},
+      itemStyle:{color:s.color},
+      markPoint: (anchor && s.name==='当前 2026 周期' && lastCur)? {symbol:'circle',symbolSize:7,data:[{coord:[endX!=null?endX:lastCur.value[0], lastCur.value[1]],itemStyle:{color:s.color},label:{show:true,formatter:'最新',color:s.color,fontSize:9,position:'top'}}]} : undefined
+    }))).concat(fit?[{
+      name:fit.name,type:'line',data:fit.data,smooth:true,showSymbol:false,z:5,
+      lineStyle:{width:2.4,color:fit.color,type:'dashed'},
+      itemStyle:{color:fit.color},
+      markPoint:{symbol:'circle',symbolSize:7,data:[{coord:fit.end.value,itemStyle:{color:fit.color},label:{show:true,formatter:'30M',color:fit.color,fontSize:9,position:'top'}}]}
+    }]:[]).concat(realSeries?[{
+      name:realSeries.name,type:'line',data:realSeries.data,smooth:false,showSymbol:false,z:6,
+      lineStyle:{width:2.2,color:realSeries.color},
+      itemStyle:{color:realSeries.color},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(46,204,113,.14)'},{offset:1,color:'rgba(46,204,113,0)'}]}},
+      markPoint:{symbol:'circle',symbolSize:8,data:[{coord:[endX!=null?endX:realSeries.data[realSeries.data.length-1].value[0], realLastPoint.value[1]],itemStyle:{color:realSeries.color},label:{show:true,formatter:'实际 $'+realLastPoint.actual,color:realSeries.color,fontSize:10,position:'bottom'}}]}
+    }]:[])
+  },true);
+  const fn=document.getElementById('cycleFitNote');
+  if(fn){
+    if(fit){
+      const gain=(fit.end.value[1]/fit.curNorm-1)*100;
+      const band=fit.ends.length? '<br/><span style="color:var(--muted)">单周期外推区间：'+fit.ends.map(e=>e.name+' 归一 '+e.norm+'（约 $'+e.actual+'）').join(' ／ ')+'；等权均值受 2008 年后 QE 大牛市影响偏乐观。</span>' : '';
+      fn.innerHTML='<b style="color:'+fit.color+'">📐 平均拟合虚线：</b>两轮周期归一化路径逐月<b>等权均值</b>（经济周期模板）＋康波长波漂移 <b>+'+(KWAVE_DRIFT*100).toFixed(1)+'%/月</b>（去美元化与央行购金的长期支撑），锚定 '+last.m+' 月均价（归一 '+fit.curNorm.toFixed(1)+'）向前外推 <b>'+CYCLE_FIT_HORIZON+' 个月</b>。'+
+        '拟合终点 <b>'+fit.end.month+'</b>：归一 <b style="color:'+fit.color+'">'+fit.end.value[1].toFixed(1)+'</b>，隐含约 <b>$'+fit.end.actual+'</b>（较当前 '+(gain>=0?'+':'')+gain.toFixed(1)+'%）。'+band+
+        '<br/><span style="color:var(--muted)">口径说明：长波漂移为研究示意参数、非统计回归结果；情景参考而非预测，不构成投资建议。</span>';
+    } else fn.textContent='平均拟合：当前周期锚点或历史数据不足，暂不可计算。';
+  }
+  const read=document.getElementById('cycleRead');
+  if(read){
+    const tr=LAST.trend;
+    const phase=tr? tr.phaseName : '趋势数据未加载';
+    const trig=tr? tr.triggersLit+'/'+tr.triggers.length : '—';
+    const curTxt=lastCur? '当前月均价（非日线峰值口径）已回落至阶段高点月的 '+lastCur.value[1].toFixed(1)+'%（'+(lastCur.value[1]-100).toFixed(1)+'%）' : '当前周期暂无足够日线数据';
+    const realLast=realSeries&&realSeries.data.length? realSeries.data[realSeries.data.length-1] : null;
+    const realTxt=realLast? ' ｜ <b style="color:#2ecc71">绿色实际金价</b>（日线真实收盘）现价 $'+realLast.actual+'，较阶段高点 $'+realSeries.base.toFixed(2)+' 回撤 <b style="color:#2ecc71">'+(realLast.value[1]-100).toFixed(1)+'%</b>' : '';
+    read.innerHTML='<b>读图参考：</b>2000 年破裂后金价先随股回落 '+pctChange(300,260).toFixed(1)+'%、约 '+monthsBetween('2000-02','2001-04')+' 个月见底；2008 年先冲高再遭挤兑，回落 '+pctChange(968,761).toFixed(1)+'%、约 '+monthsBetween('2008-03','2008-11')+' 个月见底，低点后约 '+monthsBetween('2008-11','2009-09')+' 个月收复前高。'+curTxt+realTxt+'；趋势阶段＝<b style="color:var(--gold)">'+phase+'</b>，反转触发 '+trig+'。历史形态只提供路径参照：在降息/弱美元/站上 MA20 等确认条件出现前，不宜把「磨底」直接等同于底部。';
+  }
+}
+async function renderHistoryCycles(){
+  const [j,k]=await Promise.all([
+    apiFirst(['/api/gold-cycles','data/gold_bubble_cycles.json']),
+    apiFirst(['/api/gold-kline','data/gold_kline.json'])
+  ]);
+  if(!j || !j.cycles || j.cycles.length<2){
+    const meta=document.getElementById('cycleMeta'); if(meta) meta.textContent='历史周期数据加载失败';
+    return;
+  }
+  j.cycles.forEach(renderCyclePanel);
+  const nodes=(k && ((k.data&&k.data.nodes)||k.nodes)) || [];
+  renderCycleOverlay(j.cycles,nodes);
+  const meta=document.getElementById('cycleMeta');
+  if(meta) meta.textContent='世界银行 Pink Sheet 月均价 ｜ 两份周期 '+j.cycles.map(c=>c.series.length).join('+')+' 个月度点 ｜ 更新 '+j.updated;
+}
 // 加载服务端归档（API 优先 / 静态 index.json+逐日归档兜底），合并进 calState.archived（历史日覆盖显示，今日保留实时）
 async function loadArchives(){
   const cache=loadArcCache();
@@ -779,6 +1374,8 @@ async function loadArchives(){
             color: h.bandColor || (bb&&bb.color) || ev.band.color,
             act: h.bandShort || (bb&&bb.short) || ev.band.short,
             goldPrice: h.goldPrice!=null? +h.goldPrice : null,
+            goldPriceClose: h.goldPriceClose!=null? +h.goldPriceClose : null,
+            goldPriceAligned: !!h.goldPriceAligned,
             params: h.params||{}, valid: h.valid, source: h.source, updated: h.updated, date: h.date
           };
         });
@@ -803,6 +1400,8 @@ async function loadArchives(){
             arc={
               comp:+ (+sum.comp).toFixed(3), band:sum.band, color:sum.color,
               act:sum.act||'', goldPrice:sum.goldPrice!=null? +sum.goldPrice : null,
+              goldPriceClose:sum.goldPriceClose!=null? +sum.goldPriceClose : null,
+              goldPriceAligned:!!sum.goldPriceAligned,
               date:dd, summary:true
             };
           }
@@ -821,6 +1420,8 @@ async function loadArchives(){
               color:(arc&&arc.color)? arc.color : ev.band.color,
               act:(arc&&arc.act)? arc.act : ev.band.short,
               goldPrice:(arc&&arc.goldPrice!=null)? arc.goldPrice : (snap.goldPrice!=null? +snap.goldPrice : null),
+              goldPriceClose:(arc&&arc.goldPriceClose!=null)? arc.goldPriceClose : (snap.goldPriceClose!=null? +snap.goldPriceClose : null),
+              goldPriceAligned:(arc&&arc.goldPriceAligned)|| (snap.goldPriceAligned!=null? !!snap.goldPriceAligned : false),
               params:params, valid:snap.valid, source:snap.source, updated:snap.updated, date:dd
             };
           }
@@ -858,6 +1459,7 @@ function loadDayParams(key){
     const a=calState.archived[key];
     data={ params:a.params, valid:a.valid, comp:a.comp, band:a.band, color:a.color,
            goldPrice:a.goldPrice!=null? +a.goldPrice : null,
+           goldPriceClose:a.goldPriceClose!=null? +a.goldPriceClose : null,
            time:(a.updated||'')+'（服务端归档）', source:a.source||'归档', from:'archive' };
   } else if(calState.log[key]){
     const r=calState.log[key];
@@ -922,24 +1524,28 @@ async function showDayDetail(key){
       const rr=await fetch('data/history/'+key+'.json',{cache:'no-store'});
       if(rr.ok){
         const snap=await rr.json(); const ev=evalParams(snap.params||{});
-        data={ params:snap.params, valid:snap.valid, comp:ev.comp, band:ev.band.name, color:ev.band.color,
+        data={ params:snap.params, valid:snap.valid, comp:snap.comp!=null?snap.comp:ev.comp, band:snap.band||ev.band.name, color:snap.bandColor||ev.band.color,
                goldPrice: snap.goldPrice!=null? +snap.goldPrice : null,
+               goldPriceClose: snap.goldPriceClose!=null? +snap.goldPriceClose : null,
                time:(snap.updated||'')+'（归档·按需加载）', source:snap.source||'归档', from:'archive' };
       }
     }catch(e){}
   }
   if(!data){ flashCal('无 '+key+' 的数据记录'); return; }
+  const dayStress = stressOf(data.params);
   const rows=PARAMS.map(pp=>{
-    const v=data.params[pp.id]; const sc=pp.fn(v);
+    const v=data.params[pp.id]; const sc=(pp.id==='vix')? mapVIX(v,dayStress) : pp.fn(v);
     return '<tr><td>'+pp.name+'</td><td>'+(pp.unit==='%'? (+v).toFixed(2)+'%' : (pp.unit==='t'? (+v).toFixed(0)+'t' : v))+'</td>'
       +'<td style="color:'+toneColor(sc)+'">'+fmt(sc)+'</td></tr>';
   }).join('');
   const det=document.getElementById('calDetail');
   det.style.display='block';
   const srcTag = data.from==='live'?'🟢 实时':(data.from==='archive'?'📁 归档':'💾 本机');
-  const gpHtml = data.goldPrice!=null
-    ? '<div style="color:var(--gold);font-size:12px;font-weight:600;margin-bottom:6px">🪙 当日 COMEX 金价：'+Math.round(data.goldPrice)+' 美元/盎司</div>'
-    : '';
+  const gpHtml = data.goldPriceClose!=null
+    ? '<div style="color:var(--gold);font-size:12px;font-weight:600;margin-bottom:6px">🪙 当日收盘金价：'+Math.round(data.goldPriceClose)+' 美元/盎司'+(data.goldPrice!=null&&Math.abs(data.goldPrice-data.goldPriceClose)>1?' <span style="color:var(--muted);font-weight:400">（归档瞬时价 '+Math.round(data.goldPrice)+'，已按日线收盘回填）</span>':'')+'</div>'
+    : (data.goldPrice!=null
+       ? '<div style="color:var(--gold);font-size:12px;font-weight:600;margin-bottom:6px">🪙 金价：'+Math.round(data.goldPrice)+' 美元/盎司 <span style="color:var(--muted);font-weight:400">（休市/当日收盘未生成，沿用 T-1 价）</span></div>'
+       : '');
   det.innerHTML='<span class="cal-close" id="calClose">✕ 关闭</span>'
     + '<h4>'+key+' · '+data.band+'（'+fmt(data.comp)+' 分）</h4>'
     + gpHtml
@@ -971,6 +1577,7 @@ buildCalLegend();
 // ---------- 启动时自动加载每日快照（data/snapshot.json） ----------
 function setSourceNote(txt){ const el=document.getElementById('dataSrc'); if(el) el.textContent=txt; }
 function applySnapshot(s){
+  USER_ADJUSTED = false;   // 应用新快照 = 恢复自动值，清除手调标记
   const p = s.params || {};
   PARAMS.forEach(pp=>{ if(p[pp.id]!=null) document.getElementById(pp.id).value = p[pp.id]; });
   if(s.valid){
@@ -992,6 +1599,53 @@ function applySnapshot(s){
   srcTxt += '）';
   if(ptSrc) ptSrc.textContent = srcTxt;
   renderFreshness(s);
+  renderTrendCard(s);   // v0.6 趋势评估卡
+}
+// v0.6 趋势评估卡：只读展示后端 snapshot.trend（前端不重算，口径以 lib.js 为准）
+function renderTrendCard(s){
+  const card=document.getElementById('trendCard'); if(!card) return;
+  const t=s.trend;
+  if(!t){ card.style.display='none'; return; }
+  card.style.display='';
+  const ph=document.getElementById('trPhase');
+  ph.textContent=t.phaseName||'—';
+  const dirColor = t.direction==='down'?'var(--bear)':t.direction==='up'?'var(--bull)':'var(--muted)';
+  ph.style.color=dirColor;
+  const pm={m5:'5日动量',m20:'20日动量',m60:'60日动量'};
+  const mom=t.momentum||{};
+  const metrics=[
+    {k:'区间位置',v:(t.position!=null?t.position.toFixed(0)+'%':'—'),c:''},
+    {k:'距峰值回撤',v:(t.drawdown!=null?t.drawdown.toFixed(1)+'%':'—'),c:'var(--bear)'},
+    {k:pm.m20,v:(mom.m20!=null?(mom.m20>=0?'+':'')+mom.m20.toFixed(1)+'%':'—'),c:(mom.m20>=0?'var(--bull)':'var(--bear)')},
+    {k:'趋势方向',v:(t.direction==='down'?'向下':t.direction==='up'?'向上':'震荡'),c:dirColor},
+    {k:'反转触发',v:(t.triggersLit+'/'+((t.triggers||[]).length)),c:(t.triggersLit>=3?'var(--bull)':'var(--muted)')},
+  ];
+  document.getElementById('trGrid').innerHTML=metrics.map(m=>
+    '<div class="trend-metric"><div class="tm-k">'+m.k+'</div><div class="tm-v"'+(m.c?' style="color:'+m.c+'"':'')+'>'+m.v+'</div></div>').join('');
+  const confl=document.getElementById('trConfl');
+  const isRes=t.confluence==='resonant', isDiv=t.confluence==='divergent';
+  confl.style.borderColor=isRes?'var(--bull)':isDiv?'var(--gold)':'var(--line)';
+  confl.innerHTML='<b style="color:'+(isRes?'var(--bull)':isDiv?'var(--gold)':'var(--muted)')+'">'+
+    (isRes?'🔴 共振':isDiv?'🟡 背离':'⚪ 中性')+'</b> '+(t.confluenceNote||'')+' <span style="color:var(--muted)">'+(t.read||'')+'</span>';
+  const triggers=t.triggers||[];
+  document.getElementById('trTriggers').innerHTML=
+    '<div class="tt-head">反转确认清单（历史：政策转向 + 弱美元 是黄金趋势反转前置条件）</div>'+
+    triggers.map(x=>'<div class="tt-item'+(x.met?' met':'')+'"><span class="tt-dot">'+(x.met?'✓':'')+'</span>'+x.label+'</div>').join('');
+  document.getElementById('trAnalog').innerHTML='<b style="color:var(--gold)">历史参照：</b>'+(t.analog||'');
+}
+// 从 provenance 文本里解析该项参数的真实取值日（匹配 YYYY-MM-DD，取最后一个）
+function provDate(s,id){
+  const txt=(s.provenance||{})[id]; if(!txt) return '';
+  const m=String(txt).match(/20\d{2}-\d{2}-\d{2}/g);
+  return m&&m.length? m[m.length-1] : '';
+}
+// 「获得时间」单一真值源：优先 provenance 记录的真实抓取日；派生指标继承其来源项；最后才回退 freshness.date
+function freshDate(s,id){
+  let d=provDate(s,id);
+  if(!d && id==='gsr') d=provDate(s,'gold_silver');            // 金银比派生自金银价抓取日
+  if(!d && id==='ratediff') d=provDate(s,'ffr');                // 利差派生自 FFR/ECB，取 FFR 日
+  if(!d && id==='tips') d=provDate(s,'ust10y');                 // 实际利率派生自 10Y
+  return d || ((s.freshness||{})[id]||{}).date || '—';
 }
 // 渲染「数据来源与更新频率」面板：让客户清楚每项参数值的获得时间/来源/频率
 function renderFreshness(s){
@@ -1004,9 +1658,10 @@ function renderFreshness(s){
     const fr=f[id]; const nm=nameOf[id]||id;
     if(!fr){ html+='<div class="src-cell"><div class="sc-name">'+nm+'</div><div class="sc-meta">—</div></div>'; return; }
     const fc = /日/.test(fr.freq)?'daily' : (/周/.test(fr.freq)?'weekly' : (/月|季/.test(fr.freq)?'quarter':'manual'));
+    const dt=freshDate(s,id);
     html+='<div class="src-cell"><div class="sc-name">'+nm+'</div>'
       + '<div class="sc-src">'+fr.src+'</div>'
-      + '<div class="sc-meta">获得时间：'+(fr.date||'—')+'</div>'
+      + '<div class="sc-meta">获得时间：'+dt+'</div>'
       + '<span class="sc-freq '+fc+'">'+fr.freq+'</span></div>';
   });
   grid.innerHTML=html;
@@ -1042,6 +1697,7 @@ async function loadSnapshotThenCompute(){
   autoRecordToday();
   loadArchives();   // 加载服务端按日归档（API 优先），合并进日历格子与趋势图（跨设备可追溯）
   renderGoldChart(); // ①窗口：纽约 COMEX 黄金价格变动曲线
+  await renderHistoryCycles(); // 历史泡沫周期：金价路径参照（API/静态双兜底）
 }
 function autoRecordToday(){
   const t = new Date();

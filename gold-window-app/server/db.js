@@ -122,6 +122,36 @@ function getHistory(date){
   const row = db.prepare('SELECT payload FROM history WHERE date=?').get(date);
   return row ? JSON.parse(row.payload) : null;
 }
+// 从 data/gold_kline.json 幂等同步节点进 kline 表（严格镜像 JSON 的最新窗口）。
+// 每日自动化直接写 JSON 真值源、不走 DB；服务常驻期间 SQLite 会落后于 JSON，
+// 因此 API/每日任务在读取前先调用本函数，保证曲线实时同步、且不残留 JSON 已移除的旧节点。
+function syncKlineFromJson(){
+  const kFile = path.join(DATA_DIR, 'gold_kline.json');
+  if(!fs.existsSync(kFile)) return 0;
+  let n = 0;
+  try{
+    const k = JSON.parse(fs.readFileSync(kFile, 'utf8'));
+    const nodes = (k && k.data && k.data.nodes) || (k && k.nodes) || [];
+    const dates = [];
+    for(const nd of nodes){
+      if(!nd.date) continue;
+      dates.push(nd.date);
+      upsertKline.run(nd.date,
+        nd.last!=null?Number(nd.last):null, nd.open!=null?Number(nd.open):null,
+        nd.high!=null?Number(nd.high):null, nd.low!=null?Number(nd.low):null,
+        nd.volume!=null?Number(nd.volume):null, nd.amount!=null?Number(nd.amount):null);
+      n++;
+    }
+    // 移除 JSON 已不再包含的旧节点，使 kline 表严格等于 JSON 窗口（防陈旧/测试数据残留）
+    if(dates.length){
+      const existing = db.prepare('SELECT date FROM kline').all().map(r=>r.date);
+      const keep = new Set(dates), del = db.prepare('DELETE FROM kline WHERE date=?');
+      for(const d of existing) if(!keep.has(d)) del.run(d);
+    }
+  }catch(e){ console.error('[syncKline] gold_kline.json 同步失败:', e.message); }
+  return n;
+}
+
 function listKline(limit){
   // kline 表会跨多次 migrate 累积所有历史节点（>limit 行），必须取「最新 limit 条」而非最旧。
   // 先按日期降序取最近 limit 条，再反转为升序，保证图表始终展示最新窗口。
@@ -150,4 +180,4 @@ function saveHistory(h){
 }
 function saveKline(nodes){ for(const nd of nodes||[]){ if(nd.date) upsertKline.run(nd.date, nd.last!=null?Number(nd.last):null, nd.open!=null?Number(nd.open):null, nd.high!=null?Number(nd.high):null, nd.low!=null?Number(nd.low):null, nd.volume!=null?Number(nd.volume):null, nd.amount!=null?Number(nd.amount):null); } }
 
-module.exports = { migrateFromJson, latestSnapshot, getSnapshot, listHistory, getHistory, listKline, counts, saveSnapshot, saveHistory, saveKline };
+module.exports = { migrateFromJson, syncKlineFromJson, latestSnapshot, getSnapshot, listHistory, getHistory, listKline, counts, saveSnapshot, saveHistory, saveKline };
