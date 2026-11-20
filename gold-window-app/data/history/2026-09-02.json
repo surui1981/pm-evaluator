@@ -21,7 +21,13 @@
     "cb": "世界黄金协会(WGC) 本次页面 404 未能获取季度净购金，沿用上次快照 2026 Q2 全球央行净购金=289t",
     "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核)",
     "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核)",
-    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准)"
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准)",
+    "goldPriceBackfill": {
+      "source": "gold_kline 同日收盘",
+      "date": "2026-09-02",
+      "close": 4368,
+      "note": "回填字段，原 goldPrice 未改动"
+    }
   },
   "freshness": {
     "vix": {
@@ -114,5 +120,7 @@
   "band": "中性窗口",
   "color": "#5aa9ff",
   "act": "观望",
-  "archivedAt": "2026-09-02 00:31:00"
+  "archivedAt": "2026-09-02 00:31:00",
+  "goldPriceClose": 4368,
+  "goldPriceAligned": true
 }

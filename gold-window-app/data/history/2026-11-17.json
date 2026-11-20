@@ -1,0 +1,190 @@
+{
+  "updated": "2026-11-17 00:30",
+  "date": "2026-11-17",
+  "goldPrice": 3866,
+  "source": "TradingEconomics(WebFetch免key) 黄金 3865.75 / 白银 47.67 (2026-11-16 NY 周一盘中, 较 11-13 收盘回落 -0.41%/-2.16%, 金价触 2025-10 以来低位); TradingEconomics DXY 103.537 (2026-11-16); 美国财政部日频收益率曲线(WebFetch 成功 2026-11-13: 2Y=4.88/10Y=5.15→curve=0.27); FRED(DFEDTARU 成功=4 2026-11-16; T10YIE 成功=2.24 2026-11-13; DTWEXBGS 成功=121.8803 2026-11-06; ECBDFR 成功=2.5 2026-11-16); WGC(World Gold Council Q3 2026 Gold Demand Trends 落地页 WebFetch 成功: 全球央行净购金 321t); MarketWatch(VIX WebFetch JS 拦截→沿用 25.64 上次值)。westock-mcp 连接器本环境不可用(data_* 工具未注册), 全部行情经 WebFetch(免key) 刷新, 零付费账号/API key。",
+  "stale": false,
+  "note": "中性窗口 → 偏空窗口（v0.5 模型修正，非新行情）：westock-mcp 连接器在本环境不可用(data_futures/data_forex/data_macro/data_kline 均未注册), 按任务允许的替代通道全部经 WebFetch(免key) 刷新, 零付费账号/API key。本次为 2026-11-17 例行刷新(每日自动化; 实际触发 00:30 GMT+8 对应纽约周一 2026-11-16 盘中, 有新 session): TradingEconomics 黄金 3865.75 / 白银 47.67 (goldPrice 取整 3866, gsr 81.09; 较上期 11-16 的 3881.75/48.721 回落 -0.41%/-2.16%, 金价触及 2025-10 以来低位, 受鹰派美联储言论与强美元压制); TradingEconomics DXY 103.537(2026-11-16, 较 103.412 微升, 仍 mapDXY -0.7); 美国财政部曲线 CSV WebFetch 成功 2026-11-13: 2Y=4.88/10Y=5.15(10Y 维持破5%→mapUst10 -1.0)→curve=0.27; FRED DFEDTARU 4(11-16)/T10YIE 2.24(11-13)→tips=2.91/DTWEXBGS 121.8803(11-06, mapTWI -0.1)/ECBDFR 2.5(11-16)→ratediff=1.5; WGC Q3 2026 Gold Demand Trends 落地页本次 WebFetch 成功解析: 全球央行净购金 321.2t→321(与上次一致); MarketWatch VIX 本次 WebFetch JS 拦截→按任务兜底沿用 25.64(上次值, mapVIX 0.5)。关键结论: 加权 13 项参数映射区间较 11-16 无一跨阈值(全部同桶; dxy 103.412→103.537 仍 ≥103 桶) → comp 仍为 -0.159、score100 仍为 42.1, 中性窗口·观望 与上期完全一致。goldPrice/gsr 不参与加权。comp 经 server/lib.js evalParams() 复核一致。gpr/fiscal/etf 结构性沿用。",
+  "provenance": {
+    "gold_silver": "TradingEconomics 现货金/银: 黄金 3865.75 / 白银 47.67 美元/盎司 (2026-11-16 NY 周一盘中, WebFetch免key；westock-mcp fuGC/fuSI 不可用)",
+    "goldPrice": "COMEX黄金参考价: TradingEconomics 黄金 3865.75 美元/盎司 (2026-11-16 NY 盘中, 取整数=3866)。westock-mcp data_kline(fuGC) 与 data_futures(fuGC) 均不可用, 按任务兜底改经 WebFetch 获取现货金作为 COMEX 参考价",
+    "dxy": "美元指数 DXY: 103.537 (TradingEconomics WebFetch 成功解析, 2026-11-16, mapDXY -0.7)",
+    "ffr": "联邦基金利率目标上限: FRED DFEDTARU 最新完整行=4% (2026-11-16；FOMC 加息后维持；WebFetch 成功)",
+    "ust10y": "美国财政部 Daily Treasury Par Yield Curve 10Y CMT: 5.15% (2026-11-13, 美国财政部曲线 CSV WebFetch 成功；升破5%)",
+    "ust2y": "美国财政部 Daily Treasury Par Yield Curve 2Y CMT: 4.88% (2026-11-13, 美国财政部曲线 CSV WebFetch 成功)",
+    "gsr": "派生 = 黄金/白银 = 3865.75/47.67 = 81.09 (TradingEconomics, 2026-11-16 NY)",
+    "curve": "派生 = ust10y - ust2y = 5.15-4.88 = 0.27 (美国财政部曲线 2026-11-13)",
+    "tips": "派生 = ust10y - T10YIE = 5.15 - 2.24 = 2.91% (T10YIE 2026-11-13, FRED WebFetch 成功；ust10y 5.15)",
+    "twi": "FRED DTWEXBGS 贸易加权美元指数=121.8803 (2026-11-06, 免key WebFetch 成功, mapTWI -0.1)",
+    "ratediff": "FRED ECBDFR 欧央行存款便利利率=2.5% (2026-11-16, 免key WebFetch 成功) 派生: ffr - ECB = 4-2.5 = 1.5%",
+    "vix": "MarketWatch VIX: 25.64 (本次 WebFetch JS 拦截→按任务兜底沿用上次值, mapVIX 0.5)",
+    "cb": "世界黄金协会(WGC) 央行购金(季频): 全球央行净购金 321t(Q3 2026, 发布于 2026-11-03；本次 Gold Demand Trends 落地页 WebFetch 成功解析 321.2t→321)",
+    "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核；沿用)",
+    "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核；沿用)",
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准沿用)",
+    "model": "v0.6.0：新增趋势评估模块（周期阶段/方向/共振/反转触发清单），基于 gold_kline 日线独立计算，与 comp 主分解耦、不计入主分；参照 2000 年互联网泡沫金价阶段。",
+    "goldPriceBackfill": {
+      "source": "gold_kline 同日收盘",
+      "date": "2026-11-17",
+      "close": 3876,
+      "note": "回填字段，原 goldPrice 未改动"
+    }
+  },
+  "freshness": {
+    "vix": {
+      "src": "MarketWatch(WebFetch JS 拦截→沿用 25.64)",
+      "freq": "日频",
+      "date": "2026-11-06"
+    },
+    "dxy": {
+      "src": "TradingEconomics(WebFetch 成功 103.537)",
+      "freq": "日频",
+      "date": "2026-11-16"
+    },
+    "gsr": {
+      "src": "TradingEconomics 金银价派生(WebFetch, 成功)",
+      "freq": "日频",
+      "date": "2026-11-16"
+    },
+    "ffr": {
+      "src": "FRED DFEDTARU(WebFetch 成功)",
+      "freq": "日频",
+      "date": "2026-11-16"
+    },
+    "ust10y": {
+      "src": "美国财政部日频曲线(WebFetch 成功 2026-11-13)",
+      "freq": "日频",
+      "date": "2026-11-13"
+    },
+    "ust2y": {
+      "src": "美国财政部日频曲线(WebFetch 成功 2026-11-13)",
+      "freq": "日频",
+      "date": "2026-11-13"
+    },
+    "tips": {
+      "src": "FRED T10YIE 派生(WebFetch 成功 2026-11-13)",
+      "freq": "日频",
+      "date": "2026-11-13"
+    },
+    "twi": {
+      "src": "FRED DTWEXBGS(WebFetch 成功 2026-11-06)",
+      "freq": "日频(滞后~数日)",
+      "date": "2026-11-06"
+    },
+    "ratediff": {
+      "src": "FRED ECBDFR 派生(WebFetch 成功 2026-11-16)",
+      "freq": "日频",
+      "date": "2026-11-16"
+    },
+    "cb": {
+      "src": "世界黄金协会 WGC Q3 2026(落地页 WebFetch 成功 321t)",
+      "freq": "季频",
+      "date": "2026-09-30"
+    },
+    "etf": {
+      "src": "纽约交易所大行财报披露(GLD持仓/流量)",
+      "freq": "季频(大行财报)",
+      "date": "2026 Q2"
+    },
+    "gpr": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "月频复核",
+      "date": "基准55"
+    },
+    "fiscal": {
+      "src": "结构性判断(无免费日频)",
+      "freq": "季频复核",
+      "date": "基准60"
+    }
+  },
+  "params": {
+    "tips": 2.91,
+    "ust10y": 5.15,
+    "ust2y": 4.88,
+    "ffr": 4,
+    "curve": 0.27,
+    "dxy": 103.537,
+    "twi": 121.8803,
+    "ratediff": 1.5,
+    "cb": 321,
+    "gpr": 55,
+    "fiscal": 60,
+    "vix": 25.64,
+    "etf": 3
+  },
+  "valid": {
+    "gsr": 81.09
+  },
+  "score100": 30.6,
+  "_score100_note": "100 分制窗口分（50=中性），由 server/lib.js evalParams() 实时计算口径一致",
+  "comp": -0.389,
+  "band": "偏空窗口",
+  "color": "#5fbf94",
+  "act": "减仓避险",
+  "archivedAt": "2026-11-17 00:30",
+  "regime": "equityStress",
+  "modelVersion": "0.6.0",
+  "flowShadow": {
+    "goldBondRatio": 7.51,
+    "goldMomentum20": -6.9,
+    "read": "资金流影子层（仅记录、不进主分）：金价近20交易日下跌 6.9%；黄金/美债比价 7.51（金价 3866 / 10Y 5.15%）——金债相对均衡。"
+  },
+  "goldPriceClose": 3876,
+  "goldPriceAligned": true,
+  "trend": {
+    "asOf": "2026-11-16",
+    "price": 3865.75,
+    "position": 0,
+    "drawdown": -18,
+    "momentum": {
+      "m5": -4.6,
+      "m20": -6.9,
+      "m60": -6.5
+    },
+    "ma": {
+      "ma5": 3953.3,
+      "ma20": 4020.5,
+      "ma60": 4271.6,
+      "ma120": 4259.3,
+      "bearStack": true
+    },
+    "direction": "down",
+    "strength": 1,
+    "regime": "equityStress",
+    "phase": "capitulation",
+    "phaseName": "流动性挤兑·磨底",
+    "phaseNote": "流动性挤兑·磨底期：价格探至区间低位、均线完全空头、金随股跌避险失效（类比 2000.3-2001.1）。",
+    "confluence": "resonant",
+    "confluenceNote": "宏观评分与价格趋势同向（共振），信号可信度增强。",
+    "triggers": [
+      {
+        "key": "fed_pivot",
+        "label": "美联储政策转向（FFR 自 4.0 高位回落至 ≤3.5，经验阈值）",
+        "met": false
+      },
+      {
+        "key": "dxy_top",
+        "label": "美元见顶回落（DXY 跌破 101）",
+        "met": false
+      },
+      {
+        "key": "yield_top",
+        "label": "名义利率回落（10Y 跌破 4.8%）",
+        "met": false
+      },
+      {
+        "key": "ma_reclaim",
+        "label": "技术确认（金价站上 MA20 ≈ 4020.5）",
+        "met": false
+      },
+      {
+        "key": "regime_clear",
+        "label": "权益外溢解除（regime → normal）",
+        "met": false
+      }
+    ],
+    "triggersLit": 0,
+    "analog": "对照 2000 年：泡沫破裂初期(2000.3)金价先随美股下跌约 12% 至 2001.4 见底，避险失效是常态；真正的十年牛市起点是 2001 年降息+弱美元，滞后股市见顶约 12-13 个月。当前「金随股跌+强美元+高实际利率」与该阶段高度相似。",
+    "read": "金价处 120 日区间 0% 分位、距峰值 -18.0%，20 日动量 -6.9%，阶段＝流动性挤兑·磨底；宏观评分与价格趋势同向（共振），信号可信度增强。 反转触发已点亮 0/5 项——反转条件尚未满足，维持谨慎"
+  }
+}

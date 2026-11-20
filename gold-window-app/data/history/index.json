@@ -1,6 +1,6 @@
 {
-  "updated": "2026-09-29 08:30",
-  "note": "每日行情数据按日归档索引。2026-06-09 至 2026-08-24 为历史金价回填，2026-08-25 为金价回填，其余参数沿用最近完整快照基准；2026-08-27 起接入腾讯自选股+财政部+FRED(免key) 实时刷新；westock-mcp 不可用后全改 WebFetch(免key)。",
+  "updated": "2026-11-20 00:32:37",
+  "note": "每日自动化刷新（WebFetch 免key，零付费账号/API key）。最新归档: 2026-11-19 (goldPrice=3755, comp=-0.389, score100=30.6, 偏空窗口·减仓避险)。 ｜ v0.5.0 评分口径自 2026-11-17 生效：仅今日 summary 用新模型重算，历史日期保留旧评分（不追溯改写）。 ｜ v0.6.0 趋势评估：今日 summary 含 regime/modelVersion/trend。 ｜ 金价回填：goldPriceClose 为 gold_kline 同日收盘真值，goldPrice 保留原始记录",
   "dates": [
     "2026-06-09",
     "2026-06-10",
@@ -87,7 +87,46 @@
     "2026-09-26",
     "2026-09-27",
     "2026-09-28",
-    "2026-09-29"
+    "2026-09-29",
+    "2026-10-09",
+    "2026-10-10",
+    "2026-10-12",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-17",
+    "2026-10-18",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22",
+    "2026-10-23",
+    "2026-10-24",
+    "2026-10-26",
+    "2026-10-27",
+    "2026-10-28",
+    "2026-10-29",
+    "2026-10-30",
+    "2026-10-31",
+    "2026-11-01",
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-11-06",
+    "2026-11-07",
+    "2026-11-08",
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13",
+    "2026-11-14",
+    "2026-11-15",
+    "2026-11-16",
+    "2026-11-17",
+    "2026-11-18",
+    "2026-11-19",
+    "2026-11-20"
   ],
   "summary": {
     "2026-06-09": {
@@ -96,7 +135,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4285,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4285,
+      "goldPriceAligned": true
     },
     "2026-06-10": {
       "comp": 0.092,
@@ -104,7 +145,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4094,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4094,
+      "goldPriceAligned": true
     },
     "2026-06-11": {
       "comp": 0.092,
@@ -112,7 +155,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4234,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4234,
+      "goldPriceAligned": true
     },
     "2026-06-12": {
       "comp": 0.092,
@@ -120,7 +165,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4240,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4240,
+      "goldPriceAligned": true
     },
     "2026-06-15": {
       "comp": 0.092,
@@ -128,7 +175,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4331,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4331,
+      "goldPriceAligned": true
     },
     "2026-06-16": {
       "comp": 0.092,
@@ -136,7 +185,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4353,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4353,
+      "goldPriceAligned": true
     },
     "2026-06-17": {
       "comp": 0.092,
@@ -144,7 +195,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4276,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4276,
+      "goldPriceAligned": true
     },
     "2026-06-18": {
       "comp": 0.092,
@@ -152,7 +205,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4228,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4228,
+      "goldPriceAligned": true
     },
     "2026-06-19": {
       "comp": 0.092,
@@ -160,7 +215,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4173,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4173,
+      "goldPriceAligned": true
     },
     "2026-06-22": {
       "comp": 0.092,
@@ -168,7 +225,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4210,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4210,
+      "goldPriceAligned": true
     },
     "2026-06-23": {
       "comp": 0.092,
@@ -176,7 +235,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4129,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4129,
+      "goldPriceAligned": true
     },
     "2026-06-24": {
       "comp": 0.092,
@@ -184,7 +245,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4016,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4016,
+      "goldPriceAligned": true
     },
     "2026-06-25": {
       "comp": 0.092,
@@ -192,7 +255,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4042,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4042,
+      "goldPriceAligned": true
     },
     "2026-06-26": {
       "comp": 0.092,
@@ -200,7 +265,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4103,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4103,
+      "goldPriceAligned": true
     },
     "2026-06-29": {
       "comp": 0.092,
@@ -208,7 +275,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4030,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4031,
+      "goldPriceAligned": true
     },
     "2026-06-30": {
       "comp": 0.092,
@@ -216,7 +285,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4022,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4022,
+      "goldPriceAligned": true
     },
     "2026-07-01": {
       "comp": 0.092,
@@ -224,7 +295,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4045,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4045,
+      "goldPriceAligned": true
     },
     "2026-07-02": {
       "comp": 0.092,
@@ -232,7 +305,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4136,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4136,
+      "goldPriceAligned": true
     },
     "2026-07-03": {
       "comp": 0.092,
@@ -240,7 +315,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4187,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4187,
+      "goldPriceAligned": true
     },
     "2026-07-06": {
       "comp": 0.092,
@@ -248,7 +325,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4176,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4176,
+      "goldPriceAligned": true
     },
     "2026-07-07": {
       "comp": 0.092,
@@ -256,7 +335,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4117,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4117,
+      "goldPriceAligned": true
     },
     "2026-07-08": {
       "comp": 0.092,
@@ -264,7 +345,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4087,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4087,
+      "goldPriceAligned": true
     },
     "2026-07-09": {
       "comp": 0.092,
@@ -272,7 +355,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4133,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4133,
+      "goldPriceAligned": true
     },
     "2026-07-10": {
       "comp": 0.092,
@@ -280,7 +365,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4129,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4129,
+      "goldPriceAligned": true
     },
     "2026-07-13": {
       "comp": 0.092,
@@ -288,7 +375,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4009,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4009,
+      "goldPriceAligned": true
     },
     "2026-07-14": {
       "comp": 0.092,
@@ -296,7 +385,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4058,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4058,
+      "goldPriceAligned": true
     },
     "2026-07-15": {
       "comp": 0.092,
@@ -304,7 +395,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4067,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4067,
+      "goldPriceAligned": true
     },
     "2026-07-16": {
       "comp": 0.092,
@@ -312,7 +405,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 3980,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 3980,
+      "goldPriceAligned": true
     },
     "2026-07-17": {
       "comp": 0.092,
@@ -320,7 +415,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4023,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4023,
+      "goldPriceAligned": true
     },
     "2026-07-20": {
       "comp": 0.092,
@@ -328,7 +425,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4012,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4012,
+      "goldPriceAligned": true
     },
     "2026-07-21": {
       "comp": 0.092,
@@ -336,7 +435,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4082,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4082,
+      "goldPriceAligned": true
     },
     "2026-07-22": {
       "comp": 0.092,
@@ -344,7 +445,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4135,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4135,
+      "goldPriceAligned": true
     },
     "2026-07-23": {
       "comp": 0.092,
@@ -352,7 +455,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4052,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4052,
+      "goldPriceAligned": true
     },
     "2026-07-24": {
       "comp": 0.092,
@@ -360,7 +465,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4056,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4056,
+      "goldPriceAligned": true
     },
     "2026-07-27": {
       "comp": 0.092,
@@ -368,7 +475,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4079,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4079,
+      "goldPriceAligned": true
     },
     "2026-07-28": {
       "comp": 0.092,
@@ -376,7 +485,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4029,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4029,
+      "goldPriceAligned": true
     },
     "2026-07-29": {
       "comp": 0.092,
@@ -384,7 +495,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4066,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4066,
+      "goldPriceAligned": true
     },
     "2026-07-30": {
       "comp": 0.092,
@@ -392,7 +505,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4163,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4163,
+      "goldPriceAligned": true
     },
     "2026-07-31": {
       "comp": 0.092,
@@ -400,7 +515,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4099,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4099,
+      "goldPriceAligned": true
     },
     "2026-08-03": {
       "comp": 0.092,
@@ -408,7 +525,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4111,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4111,
+      "goldPriceAligned": true
     },
     "2026-08-04": {
       "comp": 0.092,
@@ -416,7 +535,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4134,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4134,
+      "goldPriceAligned": true
     },
     "2026-08-05": {
       "comp": 0.092,
@@ -424,7 +545,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4308,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4308,
+      "goldPriceAligned": true
     },
     "2026-08-06": {
       "comp": 0.092,
@@ -432,7 +555,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4299,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4299,
+      "goldPriceAligned": true
     },
     "2026-08-07": {
       "comp": 0.092,
@@ -440,7 +565,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4401,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4401,
+      "goldPriceAligned": true
     },
     "2026-08-10": {
       "comp": 0.092,
@@ -448,7 +575,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4449,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4449,
+      "goldPriceAligned": true
     },
     "2026-08-11": {
       "comp": 0.092,
@@ -456,7 +585,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4428,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4428,
+      "goldPriceAligned": true
     },
     "2026-08-12": {
       "comp": 0.092,
@@ -464,7 +595,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4469,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4469,
+      "goldPriceAligned": true
     },
     "2026-08-13": {
       "comp": 0.092,
@@ -472,7 +605,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4407,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4407,
+      "goldPriceAligned": true
     },
     "2026-08-14": {
       "comp": 0.092,
@@ -480,7 +615,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4432,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4432,
+      "goldPriceAligned": true
     },
     "2026-08-17": {
       "comp": 0.092,
@@ -488,7 +625,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4473,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4473,
+      "goldPriceAligned": true
     },
     "2026-08-18": {
       "comp": 0.092,
@@ -496,7 +635,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4390,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4390,
+      "goldPriceAligned": true
     },
     "2026-08-19": {
       "comp": 0.092,
@@ -504,7 +645,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4581,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4581,
+      "goldPriceAligned": true
     },
     "2026-08-20": {
       "comp": 0.092,
@@ -512,7 +655,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4575,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4575,
+      "goldPriceAligned": true
     },
     "2026-08-21": {
       "comp": 0.092,
@@ -520,7 +665,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4662,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4662,
+      "goldPriceAligned": true
     },
     "2026-08-24": {
       "comp": 0.092,
@@ -528,7 +675,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4710,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4710,
+      "goldPriceAligned": true
     },
     "2026-08-25": {
       "comp": 0.092,
@@ -536,7 +685,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4716,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4716,
+      "goldPriceAligned": true
     },
     "2026-08-26": {
       "comp": 0.092,
@@ -544,7 +695,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4701,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4648,
+      "goldPriceAligned": true
     },
     "2026-08-27": {
       "comp": 0.092,
@@ -552,7 +705,9 @@
       "band": "中性窗口",
       "color": "#5aa9ff",
       "act": "观望",
-      "goldPrice": 4653
+      "goldPrice": 4653,
+      "goldPriceClose": 4655,
+      "goldPriceAligned": true
     },
     "2026-08-28": {
       "comp": 0.077,
@@ -560,7 +715,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4659,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": 4504,
+      "goldPriceAligned": true
     },
     "2026-08-29": {
       "comp": 0.077,
@@ -568,7 +725,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4520,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-08-30": {
       "comp": 0.077,
@@ -576,7 +735,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4504,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-08-31": {
       "comp": 0.077,
@@ -584,7 +745,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4504,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": 4438,
+      "goldPriceAligned": true
     },
     "2026-09-01": {
       "comp": 0.032,
@@ -592,7 +755,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4438,
-      "score100": 51.6
+      "score100": 51.6,
+      "goldPriceClose": 4373,
+      "goldPriceAligned": true
     },
     "2026-09-02": {
       "comp": 0.032,
@@ -600,7 +765,9 @@
       "band": "中性窗口",
       "color": "#5aa9ff",
       "act": "观望",
-      "goldPrice": 4373
+      "goldPrice": 4373,
+      "goldPriceClose": 4368,
+      "goldPriceAligned": true
     },
     "2026-09-03": {
       "comp": 0.032,
@@ -608,7 +775,9 @@
       "band": "中性窗口",
       "color": "#5aa9ff",
       "act": "观望",
-      "goldPrice": 4368
+      "goldPrice": 4368,
+      "goldPriceClose": 4490,
+      "goldPriceAligned": true
     },
     "2026-09-04": {
       "comp": 0.077,
@@ -616,7 +785,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4490,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": 4429,
+      "goldPriceAligned": true
     },
     "2026-09-06": {
       "comp": 0.017,
@@ -624,7 +795,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4429,
-      "score100": 50.8
+      "score100": 50.8,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-07": {
       "comp": 0.017,
@@ -632,7 +805,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4429,
-      "score100": 50.8
+      "score100": 50.8,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-08": {
       "comp": 0.077,
@@ -640,7 +815,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4413,
-      "score100": 53.9
+      "score100": 53.9,
+      "goldPriceClose": 4405,
+      "goldPriceAligned": true
     },
     "2026-09-09": {
       "comp": 0.092,
@@ -648,7 +825,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4405,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4403,
+      "goldPriceAligned": true
     },
     "2026-09-10": {
       "comp": 0.092,
@@ -656,7 +835,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4403,
-      "score100": 54.6
+      "score100": 54.6,
+      "goldPriceClose": 4313,
+      "goldPriceAligned": true
     },
     "2026-09-11": {
       "comp": -0.027,
@@ -664,7 +845,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4313,
-      "score100": 48.7
+      "score100": 48.7,
+      "goldPriceClose": 4369,
+      "goldPriceAligned": true
     },
     "2026-09-12": {
       "comp": 0.033,
@@ -672,7 +855,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4369,
-      "score100": 51.7
+      "score100": 51.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-13": {
       "comp": -0.027,
@@ -680,7 +865,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4348,
-      "score100": 48.7
+      "score100": 48.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-14": {
       "comp": -0.027,
@@ -688,7 +875,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4348,
-      "score100": 48.7
+      "score100": 48.7,
+      "goldPriceClose": 4300,
+      "goldPriceAligned": true
     },
     "2026-09-15": {
       "comp": -0.027,
@@ -696,21 +885,27 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4300,
-      "score100": 48.7
+      "score100": 48.7,
+      "goldPriceClose": 4282,
+      "goldPriceAligned": true
     },
     "2026-09-16": {
       "comp": -0.027,
       "band": "中性窗口",
       "color": "#5aa9ff",
       "act": "观望",
-      "goldPrice": 4282
+      "goldPrice": 4282,
+      "goldPriceClose": 4345,
+      "goldPriceAligned": true
     },
     "2026-09-17": {
       "comp": -0.051,
       "band": "中性窗口",
       "color": "#5aa9ff",
       "act": "观望",
-      "goldPrice": 4345
+      "goldPrice": 4345,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-19": {
       "comp": -0.066,
@@ -718,7 +913,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4377,
-      "score100": 46.7
+      "score100": 46.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-23": {
       "comp": -0.032,
@@ -726,7 +923,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4331,
-      "score100": 48.4
+      "score100": 48.4,
+      "goldPriceClose": 4285,
+      "goldPriceAligned": true
     },
     "2026-09-24": {
       "comp": -0.102,
@@ -734,7 +933,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4285,
-      "score100": 44.9
+      "score100": 44.9,
+      "goldPriceClose": 4248,
+      "goldPriceAligned": true
     },
     "2026-09-25": {
       "comp": -0.111,
@@ -742,7 +943,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4248,
-      "score100": 44.5
+      "score100": 44.5,
+      "goldPriceClose": 4284,
+      "goldPriceAligned": true
     },
     "2026-09-26": {
       "comp": -0.111,
@@ -750,7 +953,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4306,
-      "score100": 44.5
+      "score100": 44.5,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-27": {
       "comp": -0.051,
@@ -758,7 +963,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4284,
-      "score100": 47.5
+      "score100": 47.5,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
     },
     "2026-09-28": {
       "comp": -0.066,
@@ -766,7 +973,9 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4284,
-      "score100": 46.7
+      "score100": 46.7,
+      "goldPriceClose": 4155,
+      "goldPriceAligned": true
     },
     "2026-09-29": {
       "comp": -0.126,
@@ -774,7 +983,438 @@
       "color": "#5aa9ff",
       "act": "观望",
       "goldPrice": 4155,
-      "score100": 43.7
+      "score100": 43.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-09": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4126,
+      "score100": 42.7,
+      "goldPriceClose": 4194,
+      "goldPriceAligned": true
+    },
+    "2026-10-10": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4191,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-12": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4194,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-15": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4115,
+      "score100": 42.7,
+      "goldPriceClose": 4154,
+      "goldPriceAligned": true
+    },
+    "2026-10-16": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4154,
+      "score100": 42.7,
+      "goldPriceClose": 4164,
+      "goldPriceAligned": true
+    },
+    "2026-10-17": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4167,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-18": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4164,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-19": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4164,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-20": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4144,
+      "score100": 42.7,
+      "goldPriceClose": 4147,
+      "goldPriceAligned": true
+    },
+    "2026-10-21": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4147,
+      "score100": 42.7,
+      "goldPriceClose": 4130,
+      "goldPriceAligned": true
+    },
+    "2026-10-22": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4130,
+      "score100": 42.7,
+      "goldPriceClose": 4053,
+      "goldPriceAligned": true
+    },
+    "2026-10-23": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4053,
+      "score100": 42.7,
+      "goldPriceClose": 4018,
+      "goldPriceAligned": true
+    },
+    "2026-10-24": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4018,
+      "score100": 43.9,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-10-26": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3998,
+      "score100": 42.7,
+      "goldPriceClose": 4017,
+      "goldPriceAligned": true
+    },
+    "2026-10-27": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4017,
+      "score100": 42.7,
+      "goldPriceClose": 4059,
+      "goldPriceAligned": true
+    },
+    "2026-10-28": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4059,
+      "score100": 42.7,
+      "goldPriceClose": 4040,
+      "goldPriceAligned": true
+    },
+    "2026-10-29": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4040,
+      "score100": 43.9,
+      "goldPriceClose": 4023,
+      "goldPriceAligned": true
+    },
+    "2026-10-30": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4023,
+      "score100": 42.7,
+      "goldPriceClose": 3874,
+      "goldPriceAligned": true
+    },
+    "2026-10-31": {
+      "comp": -0.146,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3905,
+      "score100": 42.7,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-01": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3874,
+      "score100": 43.9,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-02": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3874,
+      "score100": 43.9,
+      "goldPriceClose": 3957,
+      "goldPriceAligned": true
+    },
+    "2026-11-03": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3957,
+      "score100": 43.9,
+      "goldPriceClose": 3931,
+      "goldPriceAligned": true
+    },
+    "2026-11-04": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3931,
+      "score100": 43.9,
+      "goldPriceClose": 4049,
+      "goldPriceAligned": true
+    },
+    "2026-11-05": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4049,
+      "score100": 43.9,
+      "goldPriceClose": 4128,
+      "goldPriceAligned": true
+    },
+    "2026-11-06": {
+      "comp": -0.122,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4128,
+      "score100": 43.9,
+      "goldPriceClose": 4053,
+      "goldPriceAligned": true
+    },
+    "2026-11-07": {
+      "comp": -0.077,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4053,
+      "score100": 46.2,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-08": {
+      "comp": -0.102,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4070,
+      "score100": 44.9,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-09": {
+      "comp": -0.075,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4070,
+      "score100": 46.3,
+      "goldPriceClose": 4116,
+      "goldPriceAligned": true
+    },
+    "2026-11-10": {
+      "comp": -0.075,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4116,
+      "score100": 46.3,
+      "goldPriceClose": 4032,
+      "goldPriceAligned": true
+    },
+    "2026-11-11": {
+      "comp": -0.075,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4042,
+      "score100": 46.3,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-12": {
+      "comp": -0.075,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 4032,
+      "score100": 46.3,
+      "goldPriceClose": 3872,
+      "goldPriceAligned": true
+    },
+    "2026-11-13": {
+      "comp": -0.135,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3872,
+      "score100": 43.3,
+      "goldPriceClose": 3882,
+      "goldPriceAligned": true
+    },
+    "2026-11-14": {
+      "comp": -0.159,
+      "score100": 42.1,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3874,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-15": {
+      "comp": -0.159,
+      "score100": 42.1,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3882,
+      "goldPriceClose": null,
+      "goldPriceAligned": false
+    },
+    "2026-11-16": {
+      "comp": -0.159,
+      "score100": 42.1,
+      "band": "中性窗口",
+      "color": "#5aa9ff",
+      "act": "观望",
+      "goldPrice": 3882,
+      "goldPriceClose": 3866,
+      "goldPriceAligned": true
+    },
+    "2026-11-17": {
+      "comp": -0.389,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3866,
+      "regime": "equityStress",
+      "modelVersion": "0.6.0",
+      "goldPriceClose": 3876,
+      "goldPriceAligned": true,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 0,
+        "position": 0
+      }
+    },
+    "2026-11-18": {
+      "comp": -0.459,
+      "score100": 27,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3876,
+      "goldPriceClose": 3726,
+      "goldPriceAligned": true,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 0,
+        "position": 0
+      },
+      "regime": "equityStress",
+      "modelVersion": "0.6.4"
+    },
+    "2026-11-19": {
+      "comp": -0.467,
+      "score100": 26.6,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3755,
+      "goldPriceClose": 3680,
+      "goldPriceAligned": true,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 0,
+        "position": 0
+      },
+      "regime": "equityStress",
+      "modelVersion": "0.6.4"
+    },
+    "2026-11-20": {
+      "comp": -0.461,
+      "score100": 26.9,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3680,
+      "goldPriceClose": null,
+      "goldPriceAligned": false,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 0,
+        "position": 0
+      },
+      "regime": "equityStress",
+      "modelVersion": "0.6.4"
     }
   }
 }

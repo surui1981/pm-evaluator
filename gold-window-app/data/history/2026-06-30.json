@@ -9,7 +9,13 @@
   "provenance": {
     "goldPrice": "COMEX黄金 fuGC 2026-06-30 收盘 = 4022 美元/盎司 (gold_kline.json 回填)",
     "backfill": "其余参数沿用 2026-08-24 快照基准，待后续接入历史数据后替换",
-    "etf": "GLD ETF 月度流量=3$B (纽约交易所大行财报披露基准)"
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所大行财报披露基准)",
+    "goldPriceBackfill": {
+      "source": "gold_kline 同日收盘",
+      "date": "2026-06-30",
+      "close": 4022,
+      "note": "回填字段，原 goldPrice 未改动"
+    }
   },
   "freshness": {
     "goldPrice": {
@@ -42,5 +48,11 @@
     "gsr": 68.1
   },
   "score100": 54.6,
-  "_score100_note": "100 分制窗口分（50=中性），由 params 按统一口径计算"
+  "_score100_note": "100 分制窗口分（50=中性），由 params 按统一口径计算",
+  "goldPriceClose": 4022,
+  "goldPriceAligned": true,
+  "comp": 0.092,
+  "band": "中性窗口",
+  "bandColor": "#5aa9ff",
+  "bandShort": "观望"
 }

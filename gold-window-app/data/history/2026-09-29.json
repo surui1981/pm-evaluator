@@ -22,7 +22,13 @@
     "cb": "世界黄金协会(WGC) Gold Demand Trends Q2 2026 页面确认全球央行净购金仍在健康规模, 但净吨数仅封装在 xlsx、页面无可解析数值, 沿用 Q2 2026 全球央行净购金=289t",
     "gpr": "结构性判断基准 55 (地缘风险指数无免费日频 API, 月频手动复核；沿用)",
     "fiscal": "结构性判断基准 60 (美元信用风险/财政无免费日频 API, 季频手动复核；沿用)",
-    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准沿用)"
+    "etf": "GLD ETF 月度流量=3$B (纽约交易所各大银行财报披露, 季频; 无免费日频API, 按最新季报基准沿用)",
+    "goldPriceBackfill": {
+      "source": "休市无日线",
+      "date": "2026-09-29",
+      "close": null,
+      "note": "沿用 goldPrice（T-1 收盘）"
+    }
   },
   "freshness": {
     "vix": {
@@ -114,5 +120,7 @@
   "comp": -0.126,
   "band": "中性窗口",
   "color": "#5aa9ff",
-  "act": "观望"
+  "act": "观望",
+  "goldPriceClose": null,
+  "goldPriceAligned": false
 }
