@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-20 00:32:37",
-  "note": "每日自动化刷新（WebFetch 免key，零付费账号/API key）。最新归档: 2026-11-19 (goldPrice=3755, comp=-0.389, score100=30.6, 偏空窗口·减仓避险)。 ｜ v0.5.0 评分口径自 2026-11-17 生效：仅今日 summary 用新模型重算，历史日期保留旧评分（不追溯改写）。 ｜ v0.6.0 趋势评估：今日 summary 含 regime/modelVersion/trend。 ｜ 金价回填：goldPriceClose 为 gold_kline 同日收盘真值，goldPrice 保留原始记录",
+  "updated": "2026-11-23 15:03:38",
+  "note": "每日自动化刷新（WebFetch 免key，零付费账号/API key）。最新归档: 2026-11-23 (goldPrice=3625, comp=-0.373, score100=31.4, 偏空窗口·减仓避险, regime=normal)。 ｜  v0.5.0 评分口径自 2026-11-17 生效：仅今日 summary 用新模型重算，历史日期保留旧评分（不追溯改写）。 ｜ v0.6.0 趋势评估：今日 summary 含 regime/modelVersion/trend。 ｜ v0.6.4 保锚点线性映射。 ｜ 金价回填：goldPriceClose 为 gold_kline 同日收盘真值，goldPrice 保留原始记录",
   "dates": [
     "2026-06-09",
     "2026-06-10",
@@ -126,7 +126,9 @@
     "2026-11-17",
     "2026-11-18",
     "2026-11-19",
-    "2026-11-20"
+    "2026-11-20",
+    "2026-11-21",
+    "2026-11-23"
   ],
   "summary": {
     "2026-06-09": {
@@ -1414,6 +1416,46 @@
         "position": 0
       },
       "regime": "equityStress",
+      "modelVersion": "0.6.4"
+    },
+    "2026-11-21": {
+      "comp": -0.466,
+      "score100": 26.7,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3549,
+      "goldPriceClose": null,
+      "goldPriceAligned": false,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 0,
+        "position": 0
+      },
+      "regime": "equityStress",
+      "modelVersion": "0.6.4"
+    },
+    "2026-11-23": {
+      "comp": -0.373,
+      "score100": 31.4,
+      "band": "偏空窗口",
+      "color": "#5fbf94",
+      "act": "减仓避险",
+      "goldPrice": 3625,
+      "goldPriceClose": null,
+      "goldPriceAligned": false,
+      "trend": {
+        "phase": "capitulation",
+        "phaseName": "流动性挤兑·磨底",
+        "direction": "down",
+        "confluence": "resonant",
+        "triggersLit": 1,
+        "position": 7.3
+      },
+      "regime": "normal",
       "modelVersion": "0.6.4"
     }
   }
